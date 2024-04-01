@@ -3,6 +3,7 @@ import './App.css';
 
 type Employee = {
     id: number;
+    employeeID: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -25,6 +26,7 @@ function App() {
         : <table className="table table-striped" aria-labelledby="tabelLabel">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
@@ -38,10 +40,12 @@ function App() {
             </thead>
             <tbody>
                 {employees.map(employee =>
-                    <tr key={employee.id}>
+                    <tr key={employee.employeeID}>
+                        <td>{employee.employeeID}</td>
                         <td>{employee.firstName}</td>
                         <td>{employee.lastName}</td>
                         <td>{employee.email}</td>
+                        <td>{employee.phoneNumber}</td>
                         <td>{employee.role}</td>
                         <td>{employee.grade}</td>
                         <td>{employee.userType}</td>
