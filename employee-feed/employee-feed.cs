@@ -51,7 +51,7 @@ namespace CSCE590GroupProject.EmployeeFeed
             // Create new employee
             return new Employee
             {
-                EmployeeID = int.Parse(info[0]),
+                ID = int.Parse(info[0]),
                 FirstName = info[1],
                 LastName = info[2],
                 Email = info[3],
@@ -68,7 +68,6 @@ namespace CSCE590GroupProject.EmployeeFeed
     public class Employee
     {
         public int ID { get; set; }
-        public int EmployeeID { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Email { get; set; }

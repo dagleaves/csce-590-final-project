@@ -8,6 +8,8 @@ namespace webapp.Server.Data
         {
             
         }
-        public DbSet<webapp.Server.Models.Employee>? Employees {  get; set; } 
+        public DbSet<webapp.Server.Models.Employee> Employees { get; set; } 
+        public DbSet<webapp.Server.Models.Certificate> Certificates { get; set; }
+        public DbSet<webapp.Server.Models.Achievement> Achievements { get; set; }
     }
 }
