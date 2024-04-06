@@ -1,10 +1,41 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./styles/globals.css";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+
+import { Layout } from "@/components/layout";
+import { NotFound } from "@/pages/not-found";
+import { ThemeProvider } from "@/components/navbar/theme-provider";
+import { Home } from "@/pages/home";
+import { Dashboard } from "@/pages/dashboard";
+import { Catalog } from "@/pages/catalog";
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route
+          element={
+            <ThemeProvider>
+              <Outlet />
+            </ThemeProvider>
+          }
+        >
+          <Route
+            element={
+              <Layout navbar={true}>
+                <Outlet />
+              </Layout>
+            }
+          >
+            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/catalog" element={<Catalog />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
-)
+);
