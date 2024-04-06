@@ -9,6 +9,5 @@ export function Profile() {
            <UserIcon />
           <span className="sr-only">Profile</span>
         </Button>
-   
   );
 }
