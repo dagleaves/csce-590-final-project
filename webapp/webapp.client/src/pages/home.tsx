@@ -22,4 +22,5 @@ export function Home() {
     const data = await response.json();
     setEmployees(data);
   }
+
 }

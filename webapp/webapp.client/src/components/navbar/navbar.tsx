@@ -43,7 +43,32 @@ export function NavBar() {
           </NavigationMenu>
 
           <div className="flex flex-row gap-2 items-center">
-            <Profile />
+                      <NavigationMenu>
+                          <NavigationMenuList>
+                              <NavigationMenuItem>
+
+                              <NavigationMenuLink
+                                  className={navigationMenuTriggerStyle()}
+                                  asChild={true}
+                              >
+                                  <Link to="/my-profile"><Profile /></Link>
+                                  </NavigationMenuLink>
+                              </NavigationMenuItem>
+
+                              <NavigationMenuItem>
+
+                                  <NavigationMenuLink
+                                      className={navigationMenuTriggerStyle()}
+                                      asChild={true}
+                                  >
+                                      <Link to="/">Logout</Link>
+                                  </NavigationMenuLink>
+                              </NavigationMenuItem>
+
+                          </NavigationMenuList>
+           </NavigationMenu>
+
+
             {/* {user} */}
           </div>
         </div>

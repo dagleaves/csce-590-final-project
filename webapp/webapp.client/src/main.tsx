@@ -10,6 +10,8 @@ import { ThemeProvider } from "@/components/navbar/theme-provider";
 import { Home } from "@/pages/home";
 import { Dashboard } from "@/pages/dashboard";
 import { Catalog } from "@/pages/catalog";
+import { Profile } from "@/pages/my-profile";
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -32,6 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/catalog" element={<Catalog />} />
+            <Route path="/my-profile" element={<Profile />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>

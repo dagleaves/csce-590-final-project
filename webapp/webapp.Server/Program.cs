@@ -15,6 +15,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<EmployeeContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .SetIsOriginAllowed((host) => true)
+            .AllowAnyHeader());
+});
+
 
 var app = builder.Build();
 
@@ -24,6 +34,8 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<EmployeeContext>();
     dbContext.Database.EnsureCreated();
 }
+
+app.UseCors("CorsPolicy");
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
