@@ -11,6 +11,8 @@ import { Home } from "@/pages/home";
 import { Dashboard } from "@/pages/dashboard";
 import { Catalog } from "@/pages/catalog";
 import { Profile } from "@/pages/my-profile";
+import { Login } from "@/pages/login";
+
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -32,6 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             }
           >
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/my-profile" element={<Profile />} />
