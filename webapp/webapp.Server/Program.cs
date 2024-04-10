@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;
 using webapp.Server.Models;
+using webapp.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,19 +12,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<UserService, UserService>();
+
 // Add database context
 builder.Services.AddDbContext<EmployeeContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("CorsPolicy",
-        builder => builder
-            .AllowAnyMethod()
-            .AllowCredentials()
-            .SetIsOriginAllowed((host) => true)
-            .AllowAnyHeader());
-});
 
 
 var app = builder.Build();
