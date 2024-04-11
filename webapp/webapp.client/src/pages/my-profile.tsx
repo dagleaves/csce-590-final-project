@@ -1,26 +1,12 @@
 import { useEffect, useState } from "react";
 import { Employee } from "@/lib/types";
 import { Button } from "../components/ui/button";
+import { useContext } from "react";
+import { UserContext } from "@/components/layout";
 
 export function Profile() {
   const [employee, setEmployee] = useState<Employee>();
-
-  const [currUser, setCurrUser] = useState(
-    JSON.parse(localStorage.getItem("currUser")!),
-  );
-  const [id, setId] = useState("");
-
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("currUser")!);
-    const idToGet = JSON.parse(localStorage.getItem("id")!);
-
-    if (user) {
-      setCurrUser(user);
-      setId(idToGet);
-    }
-    populateProfileData();
-
-  }, [employee]);
+  const {user} = useContext(UserContext);
 
   function readFile() {
     const image = document.getElementById("imgUpload") as HTMLInputElement;
@@ -30,7 +16,7 @@ export function Profile() {
 
     const formData = new FormData();
     formData.append("file", image!.files[0]!);
-    formData.append("username", currUser);
+    formData.append("username", user!);
     sendFile(formData);
   }
 
@@ -41,17 +27,20 @@ export function Profile() {
     }).then((res) => res.json());
   };
 
-  async function populateProfileData() {
-    const response = await fetch("employee/" + id);
-    const data = await response.json();
-    setEmployee(data);
-  }
+  useEffect(() => {
+    if (!user) return;
+    
+    async function populateProfileData() {
+        const response = await fetch("employee/" + user);
+        const data = await response.json();
+        setEmployee(data);
+    }
+    populateProfileData();
+}, [user]);
 
   return (
     <div className="flex flex-col gap-2">
       <h1 className="text-2xl">Profile</h1>
-
-      {currUser}
 
       {employee && (
         <>
@@ -65,7 +54,7 @@ export function Profile() {
       )}
 
       <img
-        src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${currUser}.jpg`}
+        src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${user}.jpg`}
         alt="React Image"
         width="400"
         height="600"

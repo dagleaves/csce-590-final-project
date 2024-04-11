@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import { useContext } from "react";
+import { UserContext } from "@/components/layout";
 
 export function Login() {
   const navigate = useNavigate();
-
-  const [currUser, setCurrUser] = useState("");
-
-  useEffect(() => {}, [currUser]);
+  const {setUser} = useContext(UserContext);
 
   async function logInUser() {
     const form = document.getElementById("login_form");
@@ -34,12 +33,13 @@ export function Login() {
       body: formData,
     }).then((response) => {
       if (response.status == 200) {
-        setCurrUser(username);
-        localStorage.setItem("currUser", JSON.stringify(username));
+        
         response
           .json()
-          .then((data) => localStorage.setItem("id", JSON.stringify(data.id)));
+          .then((data) => setUser(JSON.stringify(data.id)));
         navigate("/my-profile");
+      } else {
+        alert("Invalid username or password");
       }
     });
 
