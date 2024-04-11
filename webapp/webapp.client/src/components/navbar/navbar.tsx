@@ -14,9 +14,7 @@ import { UserContext } from "@/components/layout";
 
 export function NavBar() {
   const navigate = useNavigate();
-  const {user, setUser} = useContext(UserContext);
-
-  console.log(user);
+  const { user, setUser } = useContext(UserContext);
 
   return (
     <div className="flex sticky top-0 z-50 h-[56px] w-full items-center justify-center bg-secondary py-2">
@@ -51,7 +49,42 @@ export function NavBar() {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {user !== null ? <div className="flex flex-row gap-2 items-center">
+          {user !== null ? (
+            <div className="flex flex-row gap-2 items-center">
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                      asChild
+                    >
+                      <Link to="/my-profile">
+                        <Profile />
+                      </Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+
+                  <NavigationMenuItem>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                      asChild
+                    >
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          localStorage.removeItem("user");
+                          setUser(null);
+                          navigate("/");
+                        }}
+                      >
+                        Logout
+                      </Button>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
+          ) : (
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -59,44 +92,12 @@ export function NavBar() {
                     className={navigationMenuTriggerStyle()}
                     asChild
                   >
-                    <Link to="/my-profile">
-                      <Profile />
-                    </Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    className={navigationMenuTriggerStyle()}
-                    asChild
-                  >
-                    <Button variant="outline" onClick={() => {
-                      localStorage.removeItem("user");
-                      setUser(null);
-                      navigate("/")
-                    }}>
-                      Logout
-                    </Button>
+                    <Link to="/Login">Login</Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
-
-          </div> : 
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  asChild
-                >
-                  <Link to="/Login">
-                    Login
-                  </Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>}
+          )}
         </div>
       </div>
     </div>

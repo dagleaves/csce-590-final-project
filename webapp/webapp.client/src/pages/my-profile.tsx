@@ -6,7 +6,7 @@ import { UserContext } from "@/components/layout";
 
 export function Profile() {
   const [employee, setEmployee] = useState<Employee>();
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   function readFile() {
     const image = document.getElementById("imgUpload") as HTMLInputElement;
@@ -31,12 +31,12 @@ export function Profile() {
     if (!user) return;
 
     async function populateProfileData() {
-        const response = await fetch("employee/" + user);
-        const data = await response.json();
-        setEmployee(data);
+      const response = await fetch("employee/" + user);
+      const data = await response.json();
+      setEmployee(data);
     }
     populateProfileData();
-}, [user]);
+  }, [user]);
 
   return (
     <div className="flex flex-col gap-2">

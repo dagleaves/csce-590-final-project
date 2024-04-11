@@ -72,7 +72,7 @@ export function Dashboard() {
         grade: employee.grade,
         email: employee.email,
         certificateName: achievement.certificateName,
-        certificateLevel: "Has Certificate",
+        certificateLevel: achievement.certificate.level,
         certifiedDate: achievement.certifiedDate,
         expiryDate: achievement.certifiedDate,
       }));

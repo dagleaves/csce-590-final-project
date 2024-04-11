@@ -10,17 +10,17 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 export function Login() {
   const navigate = useNavigate();
-  const {user, setUser} = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
     if (user !== null && user !== "") {
-        navigate("/my-profile")
-      }
-  }, [user])
+      navigate("/my-profile");
+    }
+  }, [user]);
 
   async function logInUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,16 +33,12 @@ export function Login() {
     formData.append("username", username);
     formData.append("password", password);
 
-    console.log(formData);
-
     await fetch("user/login", {
       method: "POST",
       body: formData,
     }).then((response) => {
       if (response.status == 200) {
-        response
-          .json()
-          .then((data) => setUser(JSON.stringify(data.id)));
+        response.json().then((data) => setUser(JSON.stringify(data.id)));
       } else {
         alert("Invalid username or password");
       }
@@ -59,17 +55,17 @@ export function Login() {
             <CardTitle>Login</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-1 min-w-[25vw]">
-              <label id="username_label">Username</label>
-              <Input id="username"></Input>
-              <label id="password_label">Password</label>
-              <Input id="password"></Input>
+            <label id="username_label">Username</label>
+            <Input id="username"></Input>
+            <label id="password_label">Password</label>
+            <Input id="password"></Input>
           </CardContent>
           <CardFooter className="flex flex-col w-full gap-2">
             <div className="flex flex-row justify-between w-full">
-              <Button type="button" variant="outline">Cancel</Button>
-              <Button variant="outline">
-                Login
+              <Button type="button" variant="outline">
+                Cancel
               </Button>
+              <Button variant="outline">Login</Button>
             </div>
             <h4>Forgot Password?</h4>
           </CardFooter>

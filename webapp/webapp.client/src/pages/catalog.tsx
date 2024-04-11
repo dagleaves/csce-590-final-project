@@ -20,7 +20,6 @@ export function Catalog() {
   async function fetchData() {
     const response = await fetch("certificate");
     const data = await response.json();
-    console.log(data);
     setCertificates(data);
   }
 }

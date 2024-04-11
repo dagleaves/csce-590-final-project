@@ -55,7 +55,6 @@ export const columns: ColumnDef<Employee>[] = [
     header: "Actions",
     cell: ({ row }) => {
       const employee = row.original;
-      console.log(employee);
 
       return (
         <DropdownMenu>

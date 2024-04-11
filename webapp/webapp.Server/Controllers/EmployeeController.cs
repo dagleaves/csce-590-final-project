@@ -30,7 +30,7 @@ namespace webapp.Server.Controllers
             {
                 return NotFound();
             }
-            return await _employeeContext.Employees.Include(employee => employee.Achievements).ToListAsync();
+            return await _employeeContext.Employees.Include(employee => employee.Achievements).ThenInclude(achievement => achievement.Certificate).ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -40,7 +40,7 @@ namespace webapp.Server.Controllers
             {
                 return NotFound();
             }
-            var employee = await _employeeContext.Employees.FindAsync(id);
+            var employee = await _employeeContext.Employees.Include(employee => employee.Achievements).ThenInclude(achievement => achievement.Certificate).FirstOrDefaultAsync(employee => employee.ID == id);
             if (employee == null) 
             {
                 return NotFound();
