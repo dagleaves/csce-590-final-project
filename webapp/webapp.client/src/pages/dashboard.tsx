@@ -40,7 +40,7 @@ export function Dashboard() {
     const adoptionRate =
       filteredData.filter((employee) =>
         employee.achievements.some(
-          (achievement) => new Date(achievement.certifiedDate) < new Date(),
+          (achievement) => new Date(achievement.expiryDate) < new Date(),
         ),
       ).length / data.length;
     setAdoption(adoptionRate);
@@ -54,7 +54,7 @@ export function Dashboard() {
         return [
           {
             employeeId: employee.id,
-            fullname: `${employee.firstName} ${employee.lastName}`,
+            fullName: employee.fullName,
             role: employee.role,
             grade: employee.grade,
             email: employee.email,
@@ -67,14 +67,14 @@ export function Dashboard() {
       }
       return employee.achievements!.map((achievement) => ({
         employeeId: employee.id,
-        fullname: `${employee.firstName} ${employee.lastName}`,
+        fullName: employee.fullName,
         role: employee.role,
         grade: employee.grade,
         email: employee.email,
         certificateName: achievement.certificateName,
         certificateLevel: achievement.certificate.level,
         certifiedDate: achievement.certifiedDate,
-        expiryDate: achievement.certifiedDate,
+        expiryDate: achievement.expiryDate,
       }));
     });
     // Fetch all certificates along with it

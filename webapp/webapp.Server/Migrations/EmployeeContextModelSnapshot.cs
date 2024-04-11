@@ -40,6 +40,11 @@ namespace webapp.Server.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("ExpiryDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasComputedColumnSql("DATEADD(month, 6, [CertifiedDate])");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CertificateName");
@@ -78,6 +83,11 @@ namespace webapp.Server.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FullName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("nvarchar(max)")
+                        .HasComputedColumnSql("(([FirstName]+' ')+[LastName])");
+
                     b.Property<string>("Grade")
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
@@ -100,6 +110,27 @@ namespace webapp.Server.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("webapp.Server.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("webapp.Server.Models.Achievement", b =>

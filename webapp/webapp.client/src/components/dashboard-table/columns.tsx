@@ -7,7 +7,7 @@ export const columns: ColumnDef<DashboardCertificate>[] = [
     header: "Employee ID",
   },
   {
-    accessorKey: "fullname",
+    accessorKey: "fullName",
     header: "Full Name",
   },
   {

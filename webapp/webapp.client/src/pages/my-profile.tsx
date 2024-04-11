@@ -45,7 +45,7 @@ export function Profile() {
       {employee && (
         <>
           <h3>
-            {employee!.firstName} {employee!.lastName}
+            {employee!.fullName}
           </h3>
           <h3>{employee!.email}</h3>
           <h3>{employee!.phoneNumber}</h3>

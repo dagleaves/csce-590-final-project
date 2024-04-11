@@ -1,5 +1,6 @@
 export type Employee = {
   id: number;
+  fullName: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -22,7 +23,7 @@ export type HomeCertificate = {
 
 export type DashboardCertificate = {
   employeeId: number;
-  fullname: string;
+  fullName: string;
   role: string;
   grade: string;
   email: string;
@@ -41,6 +42,7 @@ export type Certificate = {
 export type Achievement = {
   id: number;
   certifiedDate: string;
+  expiryDate: string;
   employee: Employee;
   certificateName: string;
   certificate: Certificate;

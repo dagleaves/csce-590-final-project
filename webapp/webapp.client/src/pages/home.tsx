@@ -23,20 +23,20 @@ export function Home() {
 
   async function populateEmployeeData() {
     const response = await fetch(`employee/${user}`);
-    const { firstName, lastName, achievements } = await response.json();
+    const { fullName, achievements } = await response.json();
     const data: HomeCertificate[] = achievements.map(
       (achievement: Achievement) => {
         return {
           certification: achievement.certificateName,
           certificateLevel: achievement.certificate.level,
           certifiedDate: achievement.certifiedDate,
-          status: "Valid",
-          expiryDate: achievement.certifiedDate,
+          status: new Date(achievement.expiryDate) < new Date() ? "Expired" : "Valid",
+          expiryDate: achievement.expiryDate,
         };
       },
     );
     console.log(achievements);
     setEmployees(data);
-    setName(`${firstName} ${lastName}`);
+    setName(fullName);
   }
 }

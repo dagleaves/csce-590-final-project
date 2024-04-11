@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public DateTime CertifiedDate { get; set; }
+        public DateTime ExpiryDate { get; set; }
 
         public int EmployeeId { get; set; }
         public Employee Employee { get; set; } = null!;
