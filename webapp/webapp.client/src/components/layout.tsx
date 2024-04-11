@@ -17,7 +17,6 @@ export function Layout({
   const [user, actualSetUser] = useState<string | null>(localStorage.getItem("user"));
 
   function setUser(newUser: string | null) {
-    console.log(newUser);
     actualSetUser(newUser);
     localStorage.setItem("user", newUser!);
   }

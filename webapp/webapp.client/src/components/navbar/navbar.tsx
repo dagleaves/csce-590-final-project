@@ -51,7 +51,7 @@ export function NavBar() {
             </NavigationMenuList>
           </NavigationMenu>
 
-          {user ? <div className="flex flex-row gap-2 items-center">
+          {user !== null ? <div className="flex flex-row gap-2 items-center">
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>

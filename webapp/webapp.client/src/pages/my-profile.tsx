@@ -29,7 +29,7 @@ export function Profile() {
 
   useEffect(() => {
     if (!user) return;
-    
+
     async function populateProfileData() {
         const response = await fetch("employee/" + user);
         const data = await response.json();

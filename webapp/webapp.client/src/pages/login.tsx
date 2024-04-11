@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "@/components/layout";
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -15,17 +14,17 @@ import {
 
 export function Login() {
   const navigate = useNavigate();
-  const {setUser} = useContext(UserContext);
+  const {user, setUser} = useContext(UserContext);
 
-  async function logInUser() {
-    const form = document.getElementById("login_form");
+  useEffect(() => {
+    if (user !== null && user !== "") {
+        navigate("/my-profile")
+      }
+  }, [user])
 
-    form!.addEventListener("submit", (e) => {
-      e.preventDefault();
-    });
-
+  async function logInUser(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     const formData = new FormData();
-
     const username = (document.getElementById("username") as HTMLInputElement)
       .value;
     const password = (document.getElementById("password") as HTMLInputElement)
@@ -41,11 +40,9 @@ export function Login() {
       body: formData,
     }).then((response) => {
       if (response.status == 200) {
-        
         response
           .json()
           .then((data) => setUser(JSON.stringify(data.id)));
-        navigate("/my-profile");
       } else {
         alert("Invalid username or password");
       }
