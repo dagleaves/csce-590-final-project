@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Employee } from "@/lib/types";
 import { Button } from "../components/ui/button";
-import { Input } from "@/components/ui/data-table";
 
 //import { DataTable } from "@/components/ui/data-table";
 //import { columns } from "@/components/employee-table/columns";
@@ -9,12 +8,14 @@ import { Input } from "@/components/ui/data-table";
 export function Profile() {
     const [employee, setEmployee] = useState<Employee>();
 
-    const [currUser, setCurrUser] = useState("");
+    const [currUser, setCurrUser] = useState(JSON.parse(localStorage.getItem('currUser')!));
     const [id, setId] = useState("");
+    const [profile, setProfile] = useState("");
 
 
     useEffect(() => {
         populateProfileData();
+        downloadProfileImage();
 
         const user = JSON.parse(localStorage.getItem('currUser')!);
         const idToGet = JSON.parse(localStorage.getItem('id')!);
@@ -23,6 +24,7 @@ export function Profile() {
             setCurrUser(user);
             setId(idToGet);
         }
+
     }, [employee]);
 
     function readFile() {
@@ -31,19 +33,31 @@ export function Profile() {
         // null checking
         if (!image.files) return;
 
-        const imgData = URL.createObjectURL(image!.files[0]!);
-        console.log(imgData);   
-        sendFile(imgData);
+        const formData = new FormData();
+        formData.append('file', image!.files[0]!);
+        formData.append('username', currUser);
+        sendFile(formData);
     }
 
-    const sendFile = async (imgData: string) => {
+    const sendFile = async (formData: FormData) => {
         await fetch("user/upload", {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(imgData),
-        }).then(res => res.json()).then((data) => console.log(data))
+            body: formData,
+        }).then(res => res.json()).then((data))
     }
 
+    const downloadProfileImage = async () => {
+        const url = "https://csce590groupprojecta025.blob.core.windows.net/profile-pics/" + currUser + ".jpg";
+        await fetch(url, {
+            method: 'GET',
+        }).then((data) => { setProfile(url); })
+    }
+
+    async function populateProfileData() {
+        const response = await fetch("employee/" + id);
+        const data = await response.json();
+        setEmployee(data);
+    }
 
   return (
     <div className="flex flex-col gap-2">
@@ -53,12 +67,7 @@ export function Profile() {
 
           {employee && (<><h3>{employee!.firstName} {employee!.lastName}</h3><h3>{employee!.email}</h3><h3>{employee!.phoneNumber}</h3><h3>{employee!.id}</h3></>)}
 
-          <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/Jennifer_Lopez_Interview_2019_%28cropped%29.jpg" alt="React Image" />
-
-          <Button variant="outline" className="relative">
-              {/*<input type="file" accept="image/*" name="image" id="file"></input>*/}
-
-          </Button>
+          <img src={profile} alt="React Image" width = "400" height="600"/>
 
           <Button variant='outline' onChange={readFile}>
               Upload Photo
@@ -80,11 +89,7 @@ export function Profile() {
     </div>
     );
 
-    async function populateProfileData() {
-        const response = await fetch("employee/"+id);
-        const data = await response.json();
-        setEmployee(data);
-    }
+  
 
 
 }

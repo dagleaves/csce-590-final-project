@@ -2,7 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;
 using webapp.Server.Models;
+using Azure.Storage.Blobs;
 using Azure.Storage;
+using Azure.Storage.Blobs.Models;
+
 
 namespace webapp.Server.Services
 {
@@ -43,55 +46,23 @@ namespace webapp.Server.Services
             }
         }
 
-        public Task<User> uploadImage(string url)
+        public async Task<string> UploadImage(IFormFile file, string username)
         {
-            var users = _employeeContext.Users.AsEnumerable();
 
-            try
-            {
-                if (url != "")
-                {
-                    var findUser = users
-                            .Select(user => user)
-                            .Where(user => user.Username == "lijones");
+            BlobContainerClient containerClient = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=csce590groupprojecta025;AccountKey=u1odYYKBEwwEuCi0IDVtO9knOfq1DVeYYhGmOHkewr/clSu0RkuDNwGiGXu3tlmA/3nOsZW4JusP+AStNta7Sw==;EndpointSuffix=core.windows.net", "profile-pics");
 
-                    var user = findUser.FirstOrDefault();
-                    return Task.FromResult(user);
-                }
-                else
-                {
-                    return Task.FromException<User>(new InvalidOperationException($"No URL found"));
-                }
-            }
-            catch
+            await containerClient.CreateIfNotExistsAsync();
+            BlobClient blobClient = containerClient.GetBlobClient(username + ".jpg");
+            BlobHttpHeaders httpHeaders = new BlobHttpHeaders()
             {
-                throw;
-            }
+                ContentType = file.ContentType
+            };
+
+            await blobClient.UploadAsync(file.OpenReadStream(), httpHeaders);
+
+            return "OK";
         }
 
-        public static async Task<bool> UploadProfileImage(Stream fileStream, string fileName,
-                                                    AzureStorageConfig _storageConfig)
-        {
-            // Create a URI to the blob
-            Uri blobUri = new Uri("https://" +
-                                  _storageConfig.AccountName +
-                                  ".blob.core.windows.net/" +
-                                  _storageConfig.ImageContainer +
-                                  "/" + fileName);
-
-            // Create StorageSharedKeyCredentials object by reading
-            // the values from the configuration (appsettings.json)
-            StorageSharedKeyCredential storageCredentials =
-                new StorageSharedKeyCredential(_storageConfig.AccountName, _storageConfig.AccountKey);
-
-            // Create the blob client.
-            BlobClient blobClient = new BlobClient(blobUri, storageCredentials);
-
-            // Upload the file
-            await blobClient.UploadAsync(fileStream);
-
-            return await Task.FromResult(true);
-        }
 
 
 

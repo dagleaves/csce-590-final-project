@@ -1,4 +1,6 @@
 // https://www.youtube.com/watch?v=OrHO7UeDwZc
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;
@@ -49,20 +51,15 @@ namespace webapp.Server.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<ActionResult<User>> upload([FromBody] string url)
-        {
-            try
-            {
-                var user = await _usersService.uploadImage(url);
-                return Ok(user);
+        public async Task<string> UploadImage(IFormFile file, [FromForm]String username) {
+            try {
+                await _usersService.UploadImage(file, username);
+                return "Ok";
             }
             catch
             {
                 throw;
             }
         }
-
-
-
     }
 }
