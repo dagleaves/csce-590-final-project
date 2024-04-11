@@ -1,9 +1,17 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { useContext } from "react";
 import { UserContext } from "@/components/layout";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 export function Login() {
   const navigate = useNavigate();
@@ -47,39 +55,29 @@ export function Login() {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <h1 className="text-2xl">Login</h1>
-
-      {/*<label>*/}
-      {/*    Username*/}
-      {/*    <Input name="username"></Input>*/}
-      {/*</label>*/}
-
-      {/*<label>*/}
-      {/*    Password*/}
-      {/*    <Input name="password"></Input>*/}
-      {/*</label>*/}
-
-      <form id="login_form">
-        <label id="username_label">Username</label>
-        <br></br>
-        <Input id="username"></Input>
-        <br></br>
-        <label id="password_label">Password</label>
-        <br></br>
-        <Input id="password"></Input>
-        <br></br>
-
-        <Button variant="outline" className="relative" onClick={logInUser}>
-          Login
-        </Button>
-
-        <Button variant="outline" className="relative">
-          Cancel
-        </Button>
-      </form>
-
-      <h4>Forgot Password?</h4>
+    <div className="flex w-full h-[45vh] justify-center items-end">
+      <Card>
+        <form id="login_form" onSubmit={logInUser}>
+          <CardHeader>
+            <CardTitle>Login</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-1 min-w-[25vw]">
+              <label id="username_label">Username</label>
+              <Input id="username"></Input>
+              <label id="password_label">Password</label>
+              <Input id="password"></Input>
+          </CardContent>
+          <CardFooter className="flex flex-col w-full gap-2">
+            <div className="flex flex-row justify-between w-full">
+              <Button type="button" variant="outline">Cancel</Button>
+              <Button variant="outline">
+                Login
+              </Button>
+            </div>
+            <h4>Forgot Password?</h4>
+          </CardFooter>
+        </form>
+      </Card>
     </div>
   );
 }

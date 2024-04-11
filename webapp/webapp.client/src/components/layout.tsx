@@ -24,7 +24,7 @@ export function Layout({
 
   return (
     <UserContext.Provider value={{user, setUser}}>
-    <ScrollArea className="flex flex-col h-screen">
+    <ScrollArea className="flex flex-col h-screen w-screen">
       {navbar && <NavBar />}
       <main className="flex flex-col items-center flex-1 bg-background pb-4 dark:[color-scheme:dark]">
         {children}
