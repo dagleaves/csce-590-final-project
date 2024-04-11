@@ -46,13 +46,13 @@ namespace webapp.Server.Services
             }
         }
 
-        public async Task<string> UploadImage(IFormFile file, string username)
+        public async Task<string> UploadImage(IFormFile file, string userId)
         {
 
             BlobContainerClient containerClient = new BlobContainerClient("DefaultEndpointsProtocol=https;AccountName=csce590groupprojecta025;AccountKey=u1odYYKBEwwEuCi0IDVtO9knOfq1DVeYYhGmOHkewr/clSu0RkuDNwGiGXu3tlmA/3nOsZW4JusP+AStNta7Sw==;EndpointSuffix=core.windows.net", "profile-pics");
 
             await containerClient.CreateIfNotExistsAsync();
-            BlobClient blobClient = containerClient.GetBlobClient(username + ".jpg");
+            BlobClient blobClient = containerClient.GetBlobClient(userId + ".jpg");
             BlobHttpHeaders httpHeaders = new BlobHttpHeaders()
             {
                 ContentType = file.ContentType
