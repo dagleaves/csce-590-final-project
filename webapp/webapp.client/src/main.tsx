@@ -13,8 +13,6 @@ import { Catalog } from "@/pages/catalog";
 import { Profile } from "@/pages/my-profile";
 import { Login } from "@/pages/login";
 
-
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>

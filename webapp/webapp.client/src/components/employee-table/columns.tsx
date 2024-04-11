@@ -14,9 +14,10 @@ import { SortableHeader } from "@/components/ui/sortable-header";
 export const columns: ColumnDef<Employee>[] = [
   {
     accessorKey: "id",
-    header: ({ column }) =>  
+    header: ({ column }) => (
       <SortableHeader header="Employee ID" column={column} />
-    },
+    ),
+  },
   {
     accessorKey: "firstName",
     header: "First Name",
