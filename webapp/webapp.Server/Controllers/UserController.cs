@@ -51,9 +51,9 @@ namespace webapp.Server.Controllers
         }
 
         [HttpPost("upload")]
-        public async Task<string> UploadImage(IFormFile file, [FromForm]String username) {
+        public async Task<string> UploadImage(IFormFile file, [FromForm]String userId) {
             try {
-                await _usersService.UploadImage(file, username);
+                await _usersService.UploadImage(file, userId);
                 return "Ok";
             }
             catch

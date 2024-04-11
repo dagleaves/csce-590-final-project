@@ -8,28 +8,30 @@ export function Profile() {
   const [employee, setEmployee] = useState<Employee>();
   const { user } = useContext(UserContext);
 
-  function readFile() {
-    const image = document.getElementById("imgUpload") as HTMLInputElement;
+    function readFile(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
 
-    // null checking
-    if (!image.files) return;
+        const image = document.getElementById("imgUpload") as HTMLInputElement;
 
-    const formData = new FormData();
-    formData.append("file", image!.files[0]!);
-    formData.append("username", user!);
-    sendFile(formData);
+        // null checking
+        if (!image.files) return;
+
+        const formData = new FormData();
+        formData.append("file", image!.files[0]!);
+        formData.append("userId", user!);
+        console.log(formData.get("userId"));
+        sendFile(formData);
   }
 
-  const sendFile = async (formData: FormData) => {
-    await fetch("user/upload", {
-      method: "POST",
-      body: formData,
-    }).then((res) => res.json());
+    const sendFile = async (formData: FormData) => {
+        await fetch("user/upload", {
+          method: "POST",
+          body: formData,
+        }).then((res) => res.json());
   };
 
   useEffect(() => {
-    if (!user) return;
-
+      if (!user) return;
     async function populateProfileData() {
       const response = await fetch("employee/" + user);
       const data = await response.json();
