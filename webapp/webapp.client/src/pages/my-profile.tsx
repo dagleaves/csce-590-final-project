@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import { Employee } from "@/lib/types";
 import { Button } from "../components/ui/button";
 
-//import { DataTable } from "@/components/ui/data-table";
-//import { columns } from "@/components/employee-table/columns";
-
 export function Profile() {
   const [employee, setEmployee] = useState<Employee>();
 
@@ -14,8 +11,6 @@ export function Profile() {
   const [id, setId] = useState("");
 
   useEffect(() => {
-    populateProfileData();
-
     const user = JSON.parse(localStorage.getItem("currUser")!);
     const idToGet = JSON.parse(localStorage.getItem("id")!);
 
@@ -23,6 +18,8 @@ export function Profile() {
       setCurrUser(user);
       setId(idToGet);
     }
+    populateProfileData();
+
   }, [employee]);
 
   function readFile() {
@@ -67,13 +64,22 @@ export function Profile() {
         </>
       )}
 
-      <img src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${currUser}.jpg`} alt="React Image" width="400" height="600" />
+      <img
+        src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${currUser}.jpg`}
+        alt="React Image"
+        width="400"
+        height="600"
+      />
 
       <form onSubmit={readFile} className="flex flex-row gap-2 items-center">
-        <Button variant="outline">
-          Update Photo
-        </Button>
-        <input id="imgUpload" type="file" accept="image/*" defaultValue="" required />
+        <Button variant="outline">Update Photo</Button>
+        <input
+          id="imgUpload"
+          type="file"
+          accept="image/*"
+          defaultValue=""
+          required
+        />
       </form>
 
       <Button variant="outline" className="relative">
