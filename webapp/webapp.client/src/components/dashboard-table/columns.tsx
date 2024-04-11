@@ -26,7 +26,6 @@ export const columns: ColumnDef<DashboardCertificate>[] = [
     accessorKey: "certificateName",
     header: "Certificate Name",
   },
-
   {
     accessorKey: "certificateLevel",
     header: "Certificate Level",

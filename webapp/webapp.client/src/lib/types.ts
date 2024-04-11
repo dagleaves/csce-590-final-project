@@ -9,7 +9,7 @@ export type Employee = {
   userType: string;
   username: string;
 
-  achievements?: Achievement[];
+  achievements: Achievement[];
 };
 
 export type HomeCertificate = {
@@ -42,5 +42,6 @@ export type Achievement = {
   id: number;
   certifiedDate: string;
   employee: Employee;
+  certificateName: string;
   certificate: Certificate;
 };

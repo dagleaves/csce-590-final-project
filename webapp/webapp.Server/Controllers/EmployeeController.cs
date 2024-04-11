@@ -30,7 +30,7 @@ namespace webapp.Server.Controllers
             {
                 return NotFound();
             }
-            return await _employeeContext.Employees.ToListAsync();
+            return await _employeeContext.Employees.Include(employee => employee.Achievements).ToListAsync();
         }
 
         [HttpGet("{id}")]

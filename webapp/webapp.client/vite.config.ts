@@ -66,7 +66,7 @@ export default defineConfig({
       "^/certificate": {
         target: "http://localhost:5001/",
         secure: false,
-          },
+      },
       "^/user": {
         target: "http://localhost:5001/",
         secure: false,
