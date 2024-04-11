@@ -45,7 +45,14 @@ export function Login() {
     });
 
     //console.log(response.json());
-  }
+    }
+
+    async function cancelLogin() {
+        const username = (document.getElementById("username") as HTMLInputElement);
+        username.value = "";
+        const password = (document.getElementById("password") as HTMLInputElement);
+        password.value = "";
+    }
 
   return (
     <div className="flex w-full h-[45vh] justify-center items-end">
@@ -58,11 +65,11 @@ export function Login() {
             <label id="username_label">Username</label>
             <Input id="username"></Input>
             <label id="password_label">Password</label>
-            <Input id="password"></Input>
+            <Input id="password" type="password"></Input>
           </CardContent>
           <CardFooter className="flex flex-col w-full gap-2">
             <div className="flex flex-row justify-between w-full">
-              <Button type="button" variant="outline">
+              <Button type="button" variant="outline" onClick={cancelLogin}>
                 Cancel
               </Button>
               <Button variant="outline">Login</Button>
