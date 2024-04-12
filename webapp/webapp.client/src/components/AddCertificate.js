@@ -18,7 +18,6 @@ const AddCertificate = ({ onAdd }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Form validation logic here (if needed)
   
     try {
       const response = await fetch('/api/certificates', {
@@ -33,7 +32,7 @@ const AddCertificate = ({ onAdd }) => {
         throw new Error('Something went wrong with adding the certificate');
       }
   
-      // Handle success (e.g., clear form, show message, etc.)
+      
       console.log("Certificate added successfully!");
       setFormData({
         certificateName: '',
@@ -42,7 +41,7 @@ const AddCertificate = ({ onAdd }) => {
       });
     } catch (error) {
       console.error("Failed to add certificate:", error);
-      // Handle error (e.g., show error message)
+      
     }
   };
 

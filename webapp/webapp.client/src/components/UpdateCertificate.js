@@ -18,7 +18,7 @@ const UpdateCertificate = ({ onUpdate, certificate }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Form validation logic here (if needed)
+    
   
     try {
       const response = await fetch(`/api/certificates/${certificate.id}`, {
@@ -33,12 +33,12 @@ const UpdateCertificate = ({ onUpdate, certificate }) => {
         throw new Error('Something went wrong with updating the certificate');
       }
   
-      // Handle success (e.g., clear form, show message, call onUpdate etc.)
+      
       console.log("Certificate updated successfully!");
       onUpdate();
     } catch (error) {
       console.error("Failed to update certificate:", error);
-      // Handle error (e.g., show error message)
+      
     }
   };
 

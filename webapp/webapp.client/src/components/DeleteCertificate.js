@@ -15,12 +15,12 @@ const DeleteCertificate = ({ onDelete, certificateId }) => {
         throw new Error('Something went wrong with deleting the certificate');
       }
   
-      // Handle success
+      
       console.log("Certificate deleted successfully!");
       onDelete();
     } catch (error) {
       console.error("Failed to delete certificate:", error);
-      // Handle error (e.g., show error message)
+      
     }
   };
 

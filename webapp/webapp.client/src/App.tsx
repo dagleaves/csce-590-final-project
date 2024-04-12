@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import AddCertificate from './components/AddCertificate.js';
+import AddCertificate from './components/AddCertificate';
 import UpdateCertificate from './components/UpdateCertificate';
 import DeleteCertificate from './components/DeleteCertificate';
 
@@ -23,13 +23,22 @@ type FormData = {
   category: string;
 };
 
+type Certificate = {
+  id: number;
+  name: string;
+  level: string;
+  category: string;
+};
+
 function App() {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [certificates, setCertificates] = useState([]);
-  const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
+  const [isLoading, setIsLoading] = useState(false); // New state for loading indication
 
   useEffect(() => {
     populateEmployeeData();
+    populateCertificateData();
   }, []);
 
   const handleAddCertificate = async (data: FormData) => {
@@ -95,8 +104,38 @@ function App() {
     }
   };
 
-  //pretty Sure const renderCertificates = () => ( is needed. Need to check first.
+  const populateCertificateData = async () => {
+    setIsLoading(true); // Trigger loading state
+    try {
+      const response = await fetch('api/certificates'); // Adjust if your endpoint is different
+      const certs = await response.json();
+      setCertificates(certs);
+    } catch (error) {
+      console.error('Error fetching certificates:', error);
+      // Handle error appropriately
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
+  };
 
+  const renderCertificates = () => (
+    <div>
+      <h2>Certificates</h2>
+      {certificates.map((cert) => (
+        <div key={cert.id}>
+          <span>{cert.name} - {cert.level} - {cert.category}</span>
+          <button onClick={() => setSelectedCertificate(cert)}>Edit</button>
+          <button onClick={() => handleDeleteCertificate(cert.id)}>Delete</button>
+        </div>
+      ))}
+      {selectedCertificate && (
+        <UpdateCertificate
+          certificate={selectedCertificate}
+          onUpdate={handleUpdateCertificate}
+        />
+      )}
+    </div>
+  );
 
   async function populateEmployeeData() {
     const response = await fetch('employee');
@@ -138,18 +177,22 @@ function App() {
         </tbody>
       </table>;
 
-  return (
-    <div>
-      <h1 id="tabelLabel">Employees</h1>
-      <p>This component demonstrates fetching data from the server and displaying a list of employees.</p>
-      {contents}
-      
-      <div className="my-4">
-        <h2>Add New Certificate</h2>
-        <AddCertificate onAdd={handleAddCertificate} />
-      </div>
-    </div>
-  );
+return (
+  <div>
+    <h1 id="tableLabel">Employees</h1>
+    {isLoading ? <p><em>Loading...</em></p> : (
+      <>
+        <p>This component demonstrates fetching data from the server and displaying a list of employees.</p>
+        {contents}
+        <div className="my-4">
+          <h2>Add New Certificate</h2>
+          <AddCertificate onAdd={handleAddCertificate} />
+          {renderCertificates()} {/* Invoke the renderCertificates function here */}
+        </div>
+      </>
+    )}
+  </div>
+);
 }
 
 export default App;
