@@ -25,34 +25,77 @@ type FormData = {
 
 function App() {
   const [employees, setEmployees] = useState<Employee[]>([]);
-  //const [certificates, setCertificates] = useState([]);
-  //const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [certificates, setCertificates] = useState([]);
+  const [selectedCertificate, setSelectedCertificate] = useState(null);
 
   useEffect(() => {
     populateEmployeeData();
   }, []);
 
   const handleAddCertificate = async (data: FormData) => {
-    //Need logic For add.
-    console.log('Adding certificate:', data);
-  };
-
-  const handleUpdateCertificate = async (data: FormData) => {
-    // Needs logic to send PUT request to API
-    // Then refresh the certificates list
-  };
-
-  const handleDeleteCertificate = async (certificateId) => {
-    //Need logic for delete
-    if (window.confirm('Are you sure you want to delete this certificate?')) {
-      // Need to Replace 'api/certificate' with actual API endpoint
-      await fetch(`api/certificate/${certificateId}`, {
-        method: 'DELETE',
+    try {
+      const response = await fetch('api/certificates', { // Use the correct endpoint for adding a certificate
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       });
-      // Update the state to reflect the deletion
-      setCertificates(certificates.filter(c => c.id !== certificateId));
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const newCertificate = await response.json();
+      setCertificates([...certificates, newCertificate]); // Add the new certificate to the state
+      console.log('Certificate added successfully:', newCertificate);
+    } catch (error) {
+      console.error('Failed to add certificate:', error);
     }
   };
+
+  const handleUpdateCertificate = async (data: FormData, certificateId: number) => {
+    try {
+      const response = await fetch(`api/certificates/${certificateId}`, { // Use the correct endpoint for updating a certificate
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const updatedCertificate = await response.json();
+      setCertificates(certificates.map(c => c.id === certificateId ? updatedCertificate : c)); // Update the certificate in the state
+      console.log('Certificate updated successfully:', updatedCertificate);
+    } catch (error) {
+      console.error('Failed to update certificate:', error);
+    }
+  };
+
+  const handleDeleteCertificate = async (certificateId: number) => {
+    if (window.confirm('Are you sure you want to delete this certificate?')) {
+      try {
+        const response = await fetch(`api/certificates/${certificateId}`, { // Use the correct endpoint for deleting a certificate
+          method: 'DELETE',
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+  
+        setCertificates(certificates.filter(c => c.id !== certificateId)); // Remove the deleted certificate from the state
+        console.log('Certificate deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete certificate:', error);
+      }
+    }
+  };
+
+  //pretty Sure const renderCertificates = () => ( is needed. Need to check first.
 
 
   async function populateEmployeeData() {
