@@ -53,7 +53,11 @@ export function ModifyAchievementForm({
     defaultValues: {
       certificateName: achievement.certification,
       certifiedDate: new Date(achievement.certifiedDate),
-      expiryDate: getExpiryDate(achievement.certificateLevel, achievement.certifiedDate, achievement.expiryDate),
+      expiryDate: getExpiryDate(
+        achievement.certificateLevel,
+        achievement.certifiedDate,
+        achievement.expiryDate,
+      ),
     },
   });
   const { user } = useContext(UserContext);

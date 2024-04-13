@@ -39,7 +39,11 @@ export function Home() {
     const data: HomeCertificate[] = achievements.map(
       (achievement: Achievement) => {
         // Calculate the expiry date based on the certificate level
-        const date = getExpiryDate(achievement.certificate.level, achievement.certifiedDate, achievement.expiryDate);
+        const date = getExpiryDate(
+          achievement.certificate.level,
+          achievement.certifiedDate,
+          achievement.expiryDate,
+        );
         const expiryDate = date ? format(date, "MM/dd/yyyy") : "N/A";
         return {
           id: achievement.id,
@@ -47,7 +51,7 @@ export function Home() {
           certificateLevel: achievement.certificate.level,
           certifiedDate: format(achievement.certifiedDate, "MM/dd/yyyy"),
           status: getStatus(date),
-          expiryDate: expiryDate
+          expiryDate: expiryDate,
         };
       },
     );

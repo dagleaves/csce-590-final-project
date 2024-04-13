@@ -29,7 +29,10 @@ export function ModifyAchievement({
             Modify an existing achievement.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <ModifyAchievementForm achievement={achievement} triggerRefresh={triggerRefresh} />
+        <ModifyAchievementForm
+          achievement={achievement}
+          triggerRefresh={triggerRefresh}
+        />
       </AlertDialogContent>
     </AlertDialog>
   );

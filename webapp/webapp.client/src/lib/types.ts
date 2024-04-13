@@ -19,7 +19,7 @@ export type HomeCertificate = {
   certificateLevel: string;
   certifiedDate: string;
   status: string;
-  expiryDate: string;
+  expiryDate?: string;
 };
 
 export type DashboardCertificate = {
@@ -31,7 +31,7 @@ export type DashboardCertificate = {
   certificateName: string;
   certificateLevel: string;
   certifiedDate: string;
-  expiryDate: string;
+  expiryDate?: string;
 };
 
 export type Certificate = {
@@ -43,7 +43,7 @@ export type Certificate = {
 export type Achievement = {
   id: number;
   certifiedDate: string;
-  expiryDate: string;
+  expiryDate?: string;
   employee: Employee;
   certificateName: string;
   certificate: Certificate;

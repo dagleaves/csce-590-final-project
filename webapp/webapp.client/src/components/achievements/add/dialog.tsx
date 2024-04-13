@@ -24,7 +24,9 @@ export function AddAchievement({
   return (
     <AlertDialog open={open}>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" onClick={toggleOpen}>Add Achievement</Button>
+        <Button variant="outline" onClick={toggleOpen}>
+          Add Achievement
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <AlertDialogHeader>
@@ -33,7 +35,10 @@ export function AddAchievement({
             Add a new achievement to your profile.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <AddAchievementForm triggerRefresh={triggerRefresh} callback={toggleOpen} />
+        <AddAchievementForm
+          triggerRefresh={triggerRefresh}
+          callback={toggleOpen}
+        />
       </AlertDialogContent>
     </AlertDialog>
   );

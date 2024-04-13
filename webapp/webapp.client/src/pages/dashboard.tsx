@@ -42,7 +42,12 @@ export function Dashboard() {
     const adoptionRate =
       filteredData.filter((employee) =>
         employee.achievements.some(
-          (achievement) => getExpiryDate(achievement.certificate.level, achievement.certifiedDate, achievement.expiryDate)! < new Date(),
+          (achievement) =>
+            getExpiryDate(
+              achievement.certificate.level,
+              achievement.certifiedDate,
+              achievement.expiryDate,
+            )! < new Date(),
         ),
       ).length / data.length;
     setAdoption(adoptionRate);
@@ -69,7 +74,11 @@ export function Dashboard() {
       }
       return employee.achievements.map((achievement) => {
         // Calculate the expiry date based on the certificate level
-        const date = getExpiryDate(achievement.certificate.level, achievement.certifiedDate, achievement.expiryDate);
+        const date = getExpiryDate(
+          achievement.certificate.level,
+          achievement.certifiedDate,
+          achievement.expiryDate,
+        );
         const expiryDate = date ? format(date, "MM/dd/yyyy") : "N/A";
         return {
           employeeId: employee.id,
@@ -80,10 +89,10 @@ export function Dashboard() {
           certificateName: achievement.certificateName,
           certificateLevel: achievement.certificate.level,
           certifiedDate: format(achievement.certifiedDate, "MM/dd/yyyy"),
-          expiryDate: expiryDate
+          expiryDate: expiryDate,
         };
+      });
     });
-  });
     // Fetch all certificates along with it
     // Fan out the data to have one record per certificate per employee
     setData(flattenedData);

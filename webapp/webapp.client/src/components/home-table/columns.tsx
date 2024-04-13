@@ -34,7 +34,10 @@ export function getColumns(
         const achievement = row.original;
 
         return (
-          <ModifyAchievement achievement={achievement} triggerRefresh={triggerRefresh} />
+          <ModifyAchievement
+            achievement={achievement}
+            triggerRefresh={triggerRefresh}
+          />
         );
       },
     },

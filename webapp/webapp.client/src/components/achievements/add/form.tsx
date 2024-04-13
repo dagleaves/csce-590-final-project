@@ -194,7 +194,9 @@ export function AddAchievementForm({
           />
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => callback?.()}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => callback?.()}>
+            Cancel
+          </AlertDialogCancel>
           <AlertDialogAction type="submit">Submit</AlertDialogAction>
         </AlertDialogFooter>
       </form>
