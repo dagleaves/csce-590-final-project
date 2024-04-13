@@ -2,95 +2,45 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;
 using webapp.Server.Models;
-// Other using directives...
 
-[ApiController]
-[Route("[controller]")]
-public class CertificateController : ControllerBase
+namespace webapp.Server.Controllers
 {
-    private readonly EmployeeContext _context;
-
-    public CertificateController(EmployeeContext context)
+    [ApiController]
+    [Route("[controller]")]
+    public class CertificateController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly EmployeeContext _employeeContext;
+        private readonly ILogger<CertificateController> _logger;
 
-    // POST: api/Certificate
-    [HttpPost]
-    public async Task<ActionResult<Certificate>> CreateCertificate(Certificate certificate)
-    {
-        _context.Certificates.Add(certificate);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetCertificate), new { name = certificate.Name }, certificate);
-    }
-
-    // GET: api/Certificate
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Certificate>>> GetCertificates()
-    {
-        return await _context.Certificates.ToListAsync();
-    }
-
-    // GET: api/Certificate/5
-    [HttpGet("{name}")]
-    public async Task<ActionResult<Certificate>> GetCertificate(string name)
-    {
-        var certificate = await _context.Certificates.FindAsync(name);
-        if (certificate == null)
+        public CertificateController(EmployeeContext employeeContext, ILogger<CertificateController> logger)
         {
-            return NotFound();
-        }
-        return certificate;
-    }
-
-    // PUT: api/Certificate/5
-    [HttpPut("{name}")]
-    public async Task<IActionResult> UpdateCertificate(string name, Certificate certificate)
-    {
-        if (name != certificate.Name)
-        {
-            return BadRequest();
+            _employeeContext = employeeContext;
+            _logger = logger;
         }
 
-        _context.Entry(certificate).State = EntityState.Modified;
-
-        try
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Certificate>>> GetCertificates()
         {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!CertificateExists(name))
+            if (_employeeContext.Certificates == null)
             {
                 return NotFound();
             }
-            else
-            {
-                throw;
-            }
+            return await _employeeContext.Certificates.ToListAsync();
         }
 
-        return NoContent();
-    }
-
-    // DELETE: api/Certificate/5
-    [HttpDelete("{name}")]
-    public async Task<IActionResult> DeleteCertificate(string name)
-    {
-        var certificate = await _context.Certificates.FindAsync(name);
-        if (certificate == null)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Certificate>> GetCertificate(int id)
         {
-            return NotFound();
+            if (_employeeContext.Certificates == null)
+            {
+                return NotFound();
+            }
+            var certificate = await _employeeContext.Certificates.FindAsync(id);
+            if (certificate == null) 
+            {
+                return NotFound();
+            }
+            return certificate;
         }
-
-        _context.Certificates.Remove(certificate);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    private bool CertificateExists(string name)
-    {
-        return _context.Certificates.Any(e => e.Name == name);
     }
 }
