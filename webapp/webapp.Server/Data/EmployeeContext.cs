@@ -16,10 +16,6 @@ namespace webapp.Server.Data
             modelBuilder.Entity<Employee>()
                 .Property(p => p.FullName)
                 .HasComputedColumnSql("(([FirstName]+' ')+[LastName])");
-
-            modelBuilder.Entity<Achievement>()
-                .Property(p => p.ExpiryDate)
-                .HasComputedColumnSql("DATEADD(month, 6, [CertifiedDate])");
         }
 
         public DbSet<webapp.Server.Models.Employee> Employees { get; set; } 

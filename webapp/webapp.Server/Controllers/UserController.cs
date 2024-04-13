@@ -1,6 +1,3 @@
-// https://www.youtube.com/watch?v=OrHO7UeDwZc
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;

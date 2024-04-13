@@ -40,10 +40,8 @@ namespace webapp.Server.Migrations
                     b.Property<int>("EmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpiryDate")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasComputedColumnSql("DATEADD(month, 6, [CertifiedDate])");
+                    b.Property<DateTime?>("ExpiryDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

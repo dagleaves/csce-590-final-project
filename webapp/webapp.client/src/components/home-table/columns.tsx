@@ -1,63 +1,63 @@
 import { HomeCertificate } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ModifyAchievement } from "@/components/achievements/update/dialog";
 
-export const columns: ColumnDef<HomeCertificate>[] = [
-  {
-    accessorKey: "certification",
-    header: "Certification",
-  },
-  {
-    accessorKey: "certificateLevel",
-    header: "Certificate Level",
-  },
-  {
-    accessorKey: "certifiedDate",
-    header: "Certified Date",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "expiryDate",
-    header: "Expiry Date",
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      const employee = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">Actions</Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => {
-                /* Open the modal */
-              }}
-            >
-              Modify
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                /* Open the modal */
-              }}
-            >
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+export function getColumns(
+  triggerRefresh: () => Promise<void>,
+): ColumnDef<HomeCertificate>[] {
+  return [
+    {
+      accessorKey: "certification",
+      header: "Certification",
     },
-  },
-];
+    {
+      accessorKey: "certificateLevel",
+      header: "Certificate Level",
+    },
+    {
+      accessorKey: "certifiedDate",
+      header: "Certified Date",
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+    },
+    {
+      accessorKey: "expiryDate",
+      header: "Expiry Date",
+    },
+    {
+      id: "modify",
+      header: "Modify",
+      cell: ({ row }) => {
+        const achievement = row.original;
+
+        return (
+          <ModifyAchievement achievement={achievement} triggerRefresh={triggerRefresh} />
+        );
+      },
+    },
+    {
+      id: "delete",
+      header: "Delete",
+      cell: ({ row }) => {
+        const achievement = row.original;
+
+        return (
+          <Button
+            variant="outline"
+            onClick={async () => {
+              await fetch(`achievement/${achievement.id}`, {
+                method: "DELETE",
+              });
+              triggerRefresh();
+            }}
+          >
+            Delete
+          </Button>
+        );
+      },
+    },
+  ];
+}

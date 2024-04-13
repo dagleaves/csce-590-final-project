@@ -45,14 +45,14 @@ export function Login() {
     });
 
     //console.log(response.json());
-    }
+  }
 
-    async function cancelLogin() {
-        const username = (document.getElementById("username") as HTMLInputElement);
-        username.value = "";
-        const password = (document.getElementById("password") as HTMLInputElement);
-        password.value = "";
-    }
+  async function cancelLogin() {
+    const username = document.getElementById("username") as HTMLInputElement;
+    username.value = "";
+    const password = document.getElementById("password") as HTMLInputElement;
+    password.value = "";
+  }
 
   return (
     <div className="flex w-full h-[45vh] justify-center items-end">

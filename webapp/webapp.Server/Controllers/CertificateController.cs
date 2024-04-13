@@ -1,4 +1,3 @@
-// https://www.youtube.com/watch?v=OrHO7UeDwZc
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;

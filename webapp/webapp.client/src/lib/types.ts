@@ -14,6 +14,7 @@ export type Employee = {
 };
 
 export type HomeCertificate = {
+  id: number;
   certification: string;
   certificateLevel: string;
   certifiedDate: string;
