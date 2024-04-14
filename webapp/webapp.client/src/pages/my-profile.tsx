@@ -37,11 +37,12 @@ export function Profile() {
       const data = await response.json();
       setEmployee(data);
     }
-    populateProfileData();
+
+      populateProfileData();
   }, [user]);
 
   return (
-    <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
       <h1 className="text-2xl">Profile</h1>
 
       {employee && (

@@ -43,5 +43,20 @@ namespace webapp.Server.Controllers
             }
             return employee;
         }
+
+        [HttpGet("{id}/name")]
+        public async Task<ActionResult<string>> GetEmployeeName(int id)
+        {
+            if (_employeeContext.Employees == null)
+            {
+                return NotFound();
+            }
+            var employee = await _employeeContext.Employees.FirstOrDefaultAsync(employee => employee.ID == id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+            return employee.FullName;
+        }
     }
 }

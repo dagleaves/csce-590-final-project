@@ -6,15 +6,30 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Link } from "react-router-dom";
-import { Profile } from "./profile";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useContext } from "react";
+import {
+    useContext, useEffect, useState, StyleSheet,
+ } from "react";
 import { UserContext } from "@/components/layout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
 
 export function NavBar() {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
+    const [name, setName] = useState<string>();
+
+    async function populateUserName() {
+        const response = await fetch("employee/" + user + "/name");
+        response.text().then((data) => setName(data));
+    }
+
+    useEffect(() => {
+        populateUserName();
+    }, [name]);
+
+
 
   return (
     <div className="flex sticky top-0 z-50 h-[56px] w-full items-center justify-center bg-secondary py-2">
@@ -55,14 +70,20 @@ export function NavBar() {
                 <NavigationMenuList>
                   <NavigationMenuItem>
                     <NavigationMenuLink
-                      className={navigationMenuTriggerStyle()}
                       asChild
                     >
                       <Link to="/my-profile">
-                        <Profile />
+                       <Avatar>
+                         <AvatarImage src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${user}.jpg`} alt="@shadcn"/>
+                                                  <AvatarFallback>CN</AvatarFallback>
+                                              </Avatar>
                       </Link>
                     </NavigationMenuLink>
-                  </NavigationMenuItem>
+                                  </NavigationMenuItem>
+
+                                  <NavigationMenuItem style={styles.userName}>
+                                      {name}
+                                  </NavigationMenuItem>
 
                   <NavigationMenuItem>
                     <NavigationMenuLink
@@ -80,7 +101,8 @@ export function NavBar() {
                         Logout
                       </Button>
                     </NavigationMenuLink>
-                  </NavigationMenuItem>
+                   </NavigationMenuItem>
+
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
@@ -103,3 +125,9 @@ export function NavBar() {
     </div>
   );
 }
+
+const styles = {
+    userName: {
+        padding: 20,
+    },
+};
