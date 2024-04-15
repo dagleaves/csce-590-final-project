@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker.Extensions.Sql;
+using Microsoft.Azure.Functions.Worker.Http;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace CSCE590GroupProject.EmployeeFeed
 {
@@ -17,8 +19,8 @@ namespace CSCE590GroupProject.EmployeeFeed
         }
 
         [Function(nameof(employee_feed))]
-        [SqlOutput("dbo.Employees", connectionStringSetting: "SqlConnectionString")]
-        public async Task<Employee[]> Run([BlobTrigger("employee-feed/{name}", Connection = "csce590groupprojecta025_STORAGE")] Stream stream, string name)
+        //[SqlOutput("dbo.Employees", connectionStringSetting: "SqlConnectionString")]
+        public async Task<OutputType> Run([BlobTrigger("employee-feed/{name}", Connection = "csce590groupprojecta025_STORAGE")] Stream stream, string name)
         {
             using var blobStreamReader = new StreamReader(stream);
             _logger.LogInformation($"C# Blob trigger function Processed blob\n Name: {name} \n");
@@ -29,16 +31,28 @@ namespace CSCE590GroupProject.EmployeeFeed
             // Start processing employees
             var line = await blobStreamReader.ReadLineAsync();
             List<Employee> employees = new List<Employee>();
+            List<User> users = new List<User>();
+
             while (line != null)
             {
                 var employee = ProcessEmployeeInfo(line);
                 employees.Add(employee);
+                var user = new User { id = employee.ID, username = employee.Username, password = "password123" };
+                users.Add(user);
                 _logger.LogInformation($"Processed employee info\n Info: {line} \n");
                 line = await blobStreamReader.ReadLineAsync();
             }
-            return employees.ToArray();
+
+            Employee[] employeesToAdd = employees.ToArray();
+            User[] usersToAdd = users.ToArray();
+
+            return new OutputType()
+            {
+                Employees = employeesToAdd,
+                Users = usersToAdd
+            };
         }
-        
+
         public static Employee ProcessEmployeeInfo(string employeeInfo)
         {
             // Process employee info
@@ -76,6 +90,22 @@ namespace CSCE590GroupProject.EmployeeFeed
         public char Grade { get; set; }
         public string? UserType { get; set; }
         public string? Username { get; set; }
+    }
+
+    public class User
+    {
+        public int id { get; set; }
+        public string? username { get; set; }
+        public string? password { get; set; }
+    }
+
+    public class OutputType
+    {
+        [SqlOutput("dbo.Employees", connectionStringSetting: "SqlConnectionString")]
+        public Employee[] Employees { get; set; }
+
+        [SqlOutput("dbo.Users", connectionStringSetting: "SqlConnectionString")]
+        public User[] Users { get; set; }
     }
 
 }
