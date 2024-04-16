@@ -47,6 +47,49 @@ namespace webapp.Server.Controllers
             }
         }
 
+        [HttpPost("verifyPassword")]
+        public async Task<ActionResult<Boolean>> VerifyPassword([FromForm] int id, [FromForm] string password)
+        {
+            try
+            {
+                var isPassCorrect = await _usersService.VerifyPassword(id, password);
+
+                if (isPassCorrect)
+                {
+                    return Ok(true);
+                } else
+                {
+                    return Ok(false);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        [HttpPost("changePassword")]
+        public async Task<ActionResult<Boolean>> ChangePassword([FromForm] int id, [FromForm] string password)
+        {
+            try
+            {
+                var isPassChanged = await _usersService.ChangePassword(id, password);
+
+                if (isPassChanged)
+                {
+                    return Ok(true);
+                }
+                else
+                {
+                    return Ok(false);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         [HttpPost("upload")]
         public async Task<string> UploadImage(IFormFile file, [FromForm]String userId) {
             try {

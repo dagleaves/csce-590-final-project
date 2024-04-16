@@ -97,7 +97,6 @@ export function NavBar() {
                         onClick={() => {
                           localStorage.removeItem("user");
                             setUser(null);
-                            console.log("U:" + user);
                           navigate("/");
                         }}
                       >

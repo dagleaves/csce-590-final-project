@@ -46,6 +46,64 @@ namespace webapp.Server.Services
             }
         }
 
+        public Task<Boolean> VerifyPassword(int id, string password)
+        {
+            var users = _employeeContext.Users.AsEnumerable();
+
+            try
+            {
+                var findUser = users
+                            .Select(user => user)
+                            .Where(user => user.Id == id);
+
+                var user = findUser.FirstOrDefault();
+
+                if (user != null && user.Password == password)
+                {
+                    return Task.FromResult(true);
+                }
+                else
+                {
+                    //wrong password
+                    return Task.FromException<Boolean>(new InvalidOperationException($"Password is incorrect"));
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public Task<Boolean> ChangePassword(int id, string password)
+        {
+            var users = _employeeContext.Users.AsEnumerable();
+
+            try
+            {
+                var findUser = users
+                            .Select(user => user)
+                            .Where(user => user.Id == id);
+
+                var user = findUser.FirstOrDefault();
+
+                if (user != null)
+                {
+                    user.Password = password;
+                    _employeeContext.SaveChanges();
+                    return Task.FromResult(true);
+                }
+                else
+                {
+                    //wrong password
+                    return Task.FromException<Boolean>(new InvalidOperationException($"Error. Password couldn't be changed."));
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<string> UploadImage(IFormFile file, string userId)
         {
 
