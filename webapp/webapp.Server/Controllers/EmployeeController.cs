@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;
 using webapp.Server.Models;
-using webapp.Server.Services;
 
 namespace webapp.Server.Controllers
 {
@@ -13,7 +12,7 @@ namespace webapp.Server.Controllers
         private readonly EmployeeContext _employeeContext;
         private readonly ILogger<EmployeeController> _logger;
 
-        public EmployeeController(EmployeeContext employeeContext, UserService userService, ILogger<EmployeeController> logger)
+        public EmployeeController(EmployeeContext employeeContext, ILogger<EmployeeController> logger)
         {
             _employeeContext = employeeContext;
             _logger = logger;
@@ -56,7 +55,7 @@ namespace webapp.Server.Controllers
             {
                 return NotFound();
             }
-            return employee.FullName;
+            return employee.FullName!;
         }
     }
 }

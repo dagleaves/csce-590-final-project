@@ -75,6 +75,10 @@ export default defineConfig({
         target: "http://localhost:5001/",
         secure: false,
       },
+      "^/email": {
+        target: "http://localhost:5001/",
+        secure: false,
+      },
     },
     port: 5173,
     https: {

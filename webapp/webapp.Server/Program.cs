@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using webapp.Server.Data;
-using webapp.Server.Models;
 using webapp.Server.Services;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +20,13 @@ builder.Services.AddScoped<UserService, UserService>();
 // Add database context
 builder.Services.AddDbContext<EmployeeContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
+
+builder.Services.AddAzureClients(clientBuilder =>
+{
+    clientBuilder.AddServiceBusClient(
+        builder.Configuration.GetConnectionString("SERVICEBUS_CONNECTIONSTRING")
+    );
+});
 
 
 var app = builder.Build();
