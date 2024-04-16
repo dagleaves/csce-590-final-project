@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Azure.Messaging.ServiceBus;
 using webapp.Server.Data;
 using webapp.Server.Models;
+using Newtonsoft.Json;
 
 namespace webapp.Server.Controllers
 {
@@ -10,12 +12,14 @@ namespace webapp.Server.Controllers
     public class AchievementController : ControllerBase
     {
         private readonly EmployeeContext _employeeContext;
+        private readonly ServiceBusClient _client;
         private readonly ILogger<AchievementController> _logger;
 
-        public AchievementController(EmployeeContext employeeContext, ILogger<AchievementController> logger)
+        public AchievementController(EmployeeContext employeeContext, ServiceBusClient client, ILogger<AchievementController> logger)
         {
             _employeeContext = employeeContext;
             _logger = logger;
+            _client = client;
         }
 
         // GET: /achievement
@@ -45,6 +49,7 @@ namespace webapp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Achievement>> CreateAchievement(Achievement achievement)
         {
+            // Get employee and certificate
             var employee = await _employeeContext.Employees.FindAsync(achievement.EmployeeId);
             if (employee == null)
             {
@@ -56,13 +61,26 @@ namespace webapp.Server.Controllers
             {
                 return NotFound();
             }
-            Console.WriteLine("Certificate: " + certificate);
 
             achievement.Certificate = certificate;
             achievement.Employee = employee;
 
+            // Save achievement to database
             _employeeContext.Achievements.Add(achievement);
             await _employeeContext.SaveChangesAsync();
+
+            // Send congratulations email
+            var email = new EmailMessage
+            {
+                Email = employee.Email!,
+                Subject = "Congratulations on your new certificate!",
+                Body = $"Congratulations {employee.FullName}!<br><br> On behalf of the Conscea Team, we would like to congratulate you on your continued hard work and success with your completion of <br><br> <strong>{certificate.Name}</strong><br><br>Keep up the great work!<br><br>Conscea Team"
+            };
+            var sender = _client.CreateSender("emails");
+            var message = JsonConvert.SerializeObject(email);
+            var serviceBusMessage = new ServiceBusMessage(message);
+            await sender.SendMessageAsync(serviceBusMessage);
+
             return CreatedAtAction(nameof(GetAchievement), new { id = achievement.Id }, achievement);
         }
 
