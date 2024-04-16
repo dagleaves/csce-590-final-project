@@ -17,7 +17,7 @@ export function Login() {
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
-    if (user !== null && user !== "") {
+      if (user !== null && user !== "") {
       navigate("/my-profile");
     }
   }, [user]);

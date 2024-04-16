@@ -21,13 +21,15 @@ export function NavBar() {
     const [name, setName] = useState<string>();
 
     async function populateUserName() {
+        console.log(user);
         const response = await fetch("employee/" + user + "/name");
         response.text().then((data) => setName(data));
     }
 
     useEffect(() => {
-        populateUserName();
-    }, [name]);
+        if (user !== null && user !== "")
+             populateUserName();
+    }, [user]);
 
 
 
@@ -74,8 +76,8 @@ export function NavBar() {
                     >
                       <Link to="/my-profile">
                        <Avatar>
-                         <AvatarImage src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${user}.jpg`} alt="@shadcn"/>
-                                                  <AvatarFallback>CN</AvatarFallback>
+                                                  <AvatarImage src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${user}.jpg`} alt="@shadcn" />
+                                                  <AvatarFallback>{name?.charAt(0)}{name?.charAt(name.indexOf(" ")+1)}</AvatarFallback>
                                               </Avatar>
                       </Link>
                     </NavigationMenuLink>
@@ -94,7 +96,8 @@ export function NavBar() {
                         variant="outline"
                         onClick={() => {
                           localStorage.removeItem("user");
-                          setUser(null);
+                            setUser(null);
+                            console.log("U:" + user);
                           navigate("/");
                         }}
                       >
