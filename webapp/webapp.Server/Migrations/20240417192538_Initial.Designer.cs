@@ -12,8 +12,8 @@ using webapp.Server.Data;
 namespace webapp.Server.Migrations
 {
     [DbContext(typeof(EmployeeContext))]
-    [Migration("20240413001125_FixExpiryDate")]
-    partial class FixExpiryDate
+    [Migration("20240417192538_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -116,10 +116,7 @@ namespace webapp.Server.Migrations
             modelBuilder.Entity("webapp.Server.Models.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Password")
                         .IsRequired()
