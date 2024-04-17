@@ -36,6 +36,7 @@ namespace CSCE590GroupProject.EmployeeFeed
             while (line != null)
             {
                 var employee = ProcessEmployeeInfo(line);
+                // change to upsert ? Maybe
                 employees.Add(employee);
                 var user = new User { id = employee.ID, username = employee.Username, password = "password123" };
                 users.Add(user);

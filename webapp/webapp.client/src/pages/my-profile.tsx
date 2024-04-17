@@ -3,8 +3,10 @@ import { Employee } from "@/lib/types";
 import { Button } from "../components/ui/button";
 import { useContext } from "react";
 import { UserContext } from "@/components/layout";
+import { useNavigate } from "react-router-dom";
 
 export function Profile() {
+  const navigate = useNavigate();
   const [employee, setEmployee] = useState<Employee>();
   const { user } = useContext(UserContext);
 
@@ -72,7 +74,7 @@ export function Profile() {
         />
       </form>
 
-      <Button variant="outline" className="relative">
+          <Button variant="outline" className="relative" onClick={() => navigate("/change-password") }>
         Change Password
       </Button>
     </div>
