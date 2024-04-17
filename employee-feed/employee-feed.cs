@@ -1,25 +1,23 @@
-using System.IO;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker.Extensions.Sql;
-using Microsoft.Azure.Functions.Worker.Http;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
+using Azure.Messaging.ServiceBus;
+using Newtonsoft.Json;
 
 namespace CSCE590GroupProject.EmployeeFeed
 {
     public class employee_feed
     {
         private readonly ILogger<employee_feed> _logger;
+        private readonly ServiceBusClient _client;
 
-        public employee_feed(ILogger<employee_feed> logger)
+        public employee_feed(ILogger<employee_feed> logger, ServiceBusClient client)
         {
             _logger = logger;
+            _client = client;
         }
 
         [Function(nameof(employee_feed))]
-        //[SqlOutput("dbo.Employees", connectionStringSetting: "SqlConnectionString")]
         public async Task<OutputType> Run([BlobTrigger("employee-feed/{name}", Connection = "csce590groupprojecta025_STORAGE")] Stream stream, string name)
         {
             using var blobStreamReader = new StreamReader(stream);
@@ -30,16 +28,29 @@ namespace CSCE590GroupProject.EmployeeFeed
 
             // Start processing employees
             var line = await blobStreamReader.ReadLineAsync();
-            List<Employee> employees = new List<Employee>();
-            List<User> users = new List<User>();
+            List<Employee> employees = new();
+            List<User> users = new();
 
             while (line != null)
             {
+                // Create employee record
                 var employee = ProcessEmployeeInfo(line);
                 // change to upsert ? Maybe
                 employees.Add(employee);
-                var user = new User { id = employee.ID, username = employee.Username, password = "password123" };
+
+                // Create user record
+                var user = new User { Id = employee.ID, Username = employee.Username!, Password = PasswordGenerator.GeneratePassword() };
                 users.Add(user);
+
+                // Send initial account setup email
+                var email = new EmailMessage
+                {
+                    Email = employee.Email!,
+                    Subject = "Welcome to the Conscea!",
+                    Body = $"Hello {employee.FirstName},<br><br>Welcome to the team! Your account has been created.<br><br>Username: {user.Username}<br>Temporary Password: {user.Password}<br><br> Please log in and change your password as soon as possible.<br><br>Thank you,<br>Conscea Team"
+                };
+                await SendEmail(email);
+
                 _logger.LogInformation($"Processed employee info\n Info: {line} \n");
                 line = await blobStreamReader.ReadLineAsync();
             }
@@ -78,6 +89,15 @@ namespace CSCE590GroupProject.EmployeeFeed
             };
 
         }
+
+        public async Task SendEmail(EmailMessage email)
+        {
+            var sender = _client.CreateSender("emails");
+            var message = JsonConvert.SerializeObject(email);
+            var serviceBusMessage = new ServiceBusMessage(message);
+            await sender.SendMessageAsync(serviceBusMessage);
+        }
+
     }
 
     public class Employee
@@ -95,18 +115,24 @@ namespace CSCE590GroupProject.EmployeeFeed
 
     public class User
     {
-        public int id { get; set; }
-        public string? username { get; set; }
-        public string? password { get; set; }
+        public int Id { get; set; }
+        public required string Username { get; set; }
+        public required string Password { get; set; }
     }
 
     public class OutputType
     {
         [SqlOutput("dbo.Employees", connectionStringSetting: "SqlConnectionString")]
-        public Employee[] Employees { get; set; }
+        public required Employee[] Employees { get; set; }
 
         [SqlOutput("dbo.Users", connectionStringSetting: "SqlConnectionString")]
-        public User[] Users { get; set; }
+        public required User[] Users { get; set; }
+    }
+
+    public class EmailMessage {
+        public required string Email { get; set; }
+        public required string Subject { get; set; }
+        public required string Body { get; set; }
     }
 
 }
