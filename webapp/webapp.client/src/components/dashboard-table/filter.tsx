@@ -16,13 +16,11 @@ export function DashboardYearSelect({
   data: Employee[];
   setYear: (year: string) => void;
 }) {
-
   const allYears = data.flatMap((certificate) => {
     return certificate.achievements.map((achievement) =>
       new Date(achievement.certifiedDate).getFullYear().toString(),
     );
-  
-  })
+  });
 
   const uniqueYears = Array.from(new Set(allYears)).sort(
     (a, b) => parseInt(b) - parseInt(a),
@@ -46,22 +44,23 @@ export function DashboardYearSelect({
 }
 
 export function filterByYear(data: Employee[], year: string) {
-  const filterYear = year === "all" ? new Date().getFullYear().toString() : year;
+  const filterYear =
+    year === "all" ? new Date().getFullYear().toString() : year;
 
   // Remove achievements not achieved in current year
   const filteredData = data.map((employee) => {
     const achievements = employee.achievements.filter(
       (achievement) =>
-        new Date(achievement.certifiedDate).getFullYear().toString() === filterYear,
+        new Date(achievement.certifiedDate).getFullYear().toString() ===
+        filterYear,
     );
     return {
       ...employee,
       achievements: achievements,
-    }
+    };
   });
 
-  console.log("filteredData", filteredData)
-
+  console.log("filteredData", filteredData);
 
   // Flatten the data to have one record per certificate per employee
   // Use one entry with no certificates for employees with no achievements

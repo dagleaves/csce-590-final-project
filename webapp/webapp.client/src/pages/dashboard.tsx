@@ -22,7 +22,10 @@ export function Dashboard() {
 
   useEffect(() => {
     if (data) {
-      const filteredData = filterByYear(data, new Date().getFullYear().toString());
+      const filteredData = filterByYear(
+        data,
+        new Date().getFullYear().toString(),
+      );
       setFilteredData(filteredData);
     }
   }, [data]);
@@ -36,8 +39,11 @@ export function Dashboard() {
 
   useEffect(() => {
     if (filteredData) {
-      const noCertificates = filteredData.filter((certificate) => certificate.certificateLevel === "No certificates").length;
-      const adoptionRate = (filteredData.length - noCertificates) / filteredData.length * 100;
+      const noCertificates = filteredData.filter(
+        (certificate) => certificate.certificateLevel === "No certificates",
+      ).length;
+      const adoptionRate =
+        ((filteredData.length - noCertificates) / filteredData.length) * 100;
       const roundedAdoptionRate = parseFloat(adoptionRate.toFixed(2));
       setAdoption(roundedAdoptionRate);
     }
