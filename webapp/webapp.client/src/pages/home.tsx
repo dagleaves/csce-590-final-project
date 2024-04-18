@@ -13,14 +13,15 @@ export function Home() {
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    console.log(user);
     if (user) populateEmployeeData();
     else setAchievements(undefined);
   }, [user]);
 
   return (
     <div className="flex flex-col gap-4 mt-4">
-      <h1 className="text-2xl">{name || "No user currently signed in"}</h1>
+      <h1 className="text-center text-4xl font-bold">
+        {name || "No user currently signed in"}
+      </h1>
       {achievements && (
         <DataTable
           columns={getColumns(populateEmployeeData)}
@@ -28,7 +29,7 @@ export function Home() {
         />
       )}
       <div className="flex w-full items-center justify-center">
-        <AddAchievement triggerRefresh={populateEmployeeData} />
+        {name && <AddAchievement triggerRefresh={populateEmployeeData} />}
       </div>
     </div>
   );
@@ -55,7 +56,6 @@ export function Home() {
         };
       },
     );
-    console.log(achievements);
     setAchievements(data);
     setName(fullName);
   }

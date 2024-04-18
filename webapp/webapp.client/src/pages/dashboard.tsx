@@ -4,26 +4,46 @@ import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/components/dashboard-table/columns";
 import { Employee } from "@/lib/types";
 import { getExpiryDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
+import * as XLSX from "xlsx";
+import {
+  DashboardYearSelect,
+  filterByYear,
+} from "@/components/dashboard-table/filter";
 
 export function Dashboard() {
   const [data, setData] = useState<DashboardCertificate[]>();
+  const [filteredData, setFilteredData] = useState<DashboardCertificate[]>();
   const [adoption, setAdoption] = useState<number>();
+  const [year, setYear] = useState<string>();
 
   useEffect(() => {
     populateData();
   }, []);
 
+  useEffect(() => {
+    if (data && year) {
+      const filteredData = filterByYear(data, year);
+      console.log("Filtered Data", filteredData);
+      setFilteredData(filteredData);
+    }
+  }, [year]);
+
   return (
     <div className="flex flex-col gap-2 px-8">
-      <h1 className="text-2xl">Dashboard</h1>
-      <div className="flex flex-col w-full items-center justify-center">
+      <h1 className="text-center text-4xl font-bold mt-4 mb-2">Dashboard</h1>
+      <div className="flex flex-row justify-between w-full items-center">
+        <DashboardYearSelect data={data || []} setYear={setYear} />
         <div className="flex flex-row gap-2">
           <h2 className="text-xl">Adoption Rate:</h2>
           <span className="text-xl">{adoption ? adoption : "Loading..."}%</span>
         </div>
+        <Button variant="outline" onClick={exportToExcel}>
+          Export to Excel
+        </Button>
       </div>
-      {data && <DataTable columns={columns} data={data} />}
+      {data && <DataTable columns={columns} data={filteredData || data} />}
     </div>
   );
 
@@ -50,9 +70,11 @@ export function Dashboard() {
             )! < new Date(),
         ),
       ).length / data.length;
-    setAdoption(adoptionRate);
 
     console.log("Adoption Rate", adoptionRate);
+    const roundedAdoptionRate = parseFloat(adoptionRate.toFixed(2));
+    console.log("Rounded Adoption Rate", roundedAdoptionRate);
+    setAdoption(roundedAdoptionRate);
 
     // Flatten the data to have one record per certificate per employee
     // Use one entry with no certificates for employees with no achievements
@@ -96,5 +118,24 @@ export function Dashboard() {
     // Fetch all certificates along with it
     // Fan out the data to have one record per certificate per employee
     setData(flattenedData);
+  }
+
+  function exportToExcel() {
+    if (!data || data.length === 0) {
+      console.error("No data available to export at this moment.");
+      return;
+    }
+
+    const dataToExport = filteredData || data;
+    const ws = XLSX.utils.json_to_sheet(dataToExport);
+    const wb = XLSX.utils.book_new();
+
+    const sheetName = year ? `Conscea Dashboard ${year}` : "Conscea Dashboard";
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+    const filename = year
+      ? `conscea_dashboard_${year}.xlsx`
+      : "conscea_dashboard.xlsx";
+    XLSX.writeFile(wb, filename);
   }
 }

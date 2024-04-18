@@ -8,30 +8,24 @@ import {
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-    useContext, useEffect, useState
- } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/components/layout";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function NavBar() {
   const navigate = useNavigate();
-    const { user, setUser } = useContext(UserContext);
-    const [name, setName] = useState<string>();
+  const { user, setUser } = useContext(UserContext);
+  const [name, setName] = useState<string>();
 
-    async function populateUserName() {
-        console.log(user);
-        const response = await fetch("employee/" + user + "/name");
-        response.text().then((data) => setName(data));
-    }
+  async function populateUserName() {
+    console.log(user);
+    const response = await fetch("employee/" + user + "/name");
+    response.text().then((data) => setName(data));
+  }
 
-    useEffect(() => {
-        if (user !== null && user !== "")
-             populateUserName();
-    }, [user]);
-
-
+  useEffect(() => {
+    if (user !== null && user !== "") populateUserName();
+  }, [user]);
 
   return (
     <div className="flex sticky top-0 z-50 h-[56px] w-full items-center justify-center bg-secondary py-2">
@@ -71,21 +65,25 @@ export function NavBar() {
               <NavigationMenu>
                 <NavigationMenuList>
                   <NavigationMenuItem>
-                    <NavigationMenuLink
-                      asChild
-                    >
+                    <NavigationMenuLink asChild>
                       <Link to="/my-profile">
-                       <Avatar>
-                                                  <AvatarImage src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${user}.jpg`} alt="@shadcn" />
-                                                  <AvatarFallback>{name?.charAt(0)}{name?.charAt(name.indexOf(" ")+1)}</AvatarFallback>
-                                              </Avatar>
+                        <Avatar>
+                          <AvatarImage
+                            src={`https://csce590groupprojecta025.blob.core.windows.net/profile-pics/${user}.jpg`}
+                            alt="@shadcn"
+                          />
+                          <AvatarFallback>
+                            {name?.charAt(0)}
+                            {name?.charAt(name.indexOf(" ") + 1)}
+                          </AvatarFallback>
+                        </Avatar>
                       </Link>
                     </NavigationMenuLink>
-                                  </NavigationMenuItem>
+                  </NavigationMenuItem>
 
-                                  <NavigationMenuItem style={styles.userName}>
-                                      {name}
-                                  </NavigationMenuItem>
+                  <NavigationMenuItem style={styles.userName}>
+                    {name}
+                  </NavigationMenuItem>
 
                   <NavigationMenuItem>
                     <NavigationMenuLink
@@ -96,15 +94,14 @@ export function NavBar() {
                         variant="outline"
                         onClick={() => {
                           localStorage.removeItem("user");
-                            setUser(null);
+                          setUser(null);
                           navigate("/");
                         }}
                       >
                         Logout
                       </Button>
                     </NavigationMenuLink>
-                   </NavigationMenuItem>
-
+                  </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
@@ -129,7 +126,7 @@ export function NavBar() {
 }
 
 const styles = {
-    userName: {
-        padding: 20,
-    },
+  userName: {
+    padding: 20,
+  },
 };

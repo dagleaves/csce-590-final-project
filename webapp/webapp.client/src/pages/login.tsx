@@ -17,7 +17,7 @@ export function Login() {
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
-      if (user !== null && user !== "") {
+    if (user !== null && user !== "") {
       navigate("/my-profile");
     }
   }, [user]);
@@ -72,7 +72,9 @@ export function Login() {
               </Button>
               <Button variant="outline">Login</Button>
             </div>
-            <a href='/forgot-password'><h4>Forgot Password?</h4></a>
+            <a href="/forgot-password">
+              <h4>Forgot Password?</h4>
+            </a>
           </CardFooter>
         </form>
       </Card>
