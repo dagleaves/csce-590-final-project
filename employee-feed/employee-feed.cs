@@ -35,6 +35,7 @@ namespace CSCE590GroupProject.EmployeeFeed
             {
                 // Create employee record
                 var employee = ProcessEmployeeInfo(line);
+                // change to upsert ? Maybe
                 employees.Add(employee);
 
                 // Create user record
@@ -46,7 +47,7 @@ namespace CSCE590GroupProject.EmployeeFeed
                 {
                     Email = employee.Email!,
                     Subject = "Welcome to the Conscea!",
-                    Body = $"Hello {employee.FirstName},<br><br>Welcome to the team! Your account has been created.<br><br>Username: {user.Username}<br>Temporary Password: {user.Password}<br><br> Please log in and change your password as soon as possible.<br><br>Thank you,<br>Conscea Team"
+                    Body = $"Hello {employee.FirstName},<br><br>Welcome to the team! Your account has been created.<br><br>Username: {user.Username}<br>Temporary Password: {user.Password}<br><br> Please log in <a href='https://webappserver20240328211244.azurewebsites.net/change-password'>here</a> and change your password as soon as possible.<br><br>Thank you,<br>Conscea Team"
                 };
                 await SendEmail(email);
 

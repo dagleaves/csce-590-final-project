@@ -4,8 +4,10 @@ import { Button } from "../components/ui/button";
 import { useContext } from "react";
 import { UserContext } from "@/components/layout";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useNavigate } from "react-router-dom";
 
 export function Profile() {
+  const navigate = useNavigate();
   const [employee, setEmployee] = useState<Employee>();
   const { user } = useContext(UserContext);
   const [selectedImage, setSelectedImage] = useState<boolean>(false);
@@ -78,7 +80,11 @@ export function Profile() {
             </div>
           )}
 
-          <Button variant="outline" className="relative">
+          <Button
+            variant="outline"
+            className="relative"
+            onClick={() => navigate("/change-password")}
+          >
             Change Password
           </Button>
         </div>

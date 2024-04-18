@@ -47,6 +47,21 @@ namespace webapp.Server.Controllers
             }
         }
 
+        [HttpGet("{username}/id")]
+        public async Task<ActionResult<int>> GetUserId(string username)
+        {
+            try
+            {
+                var userId = await _usersService.GetUserId(username);
+
+                return Ok(userId);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         [HttpPost("verifyPassword")]
         public async Task<ActionResult<Boolean>> VerifyPassword([FromForm] int id, [FromForm] string password)
         {

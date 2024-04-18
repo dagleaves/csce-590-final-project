@@ -46,6 +46,34 @@ namespace webapp.Server.Services
             }
         }
 
+        public Task<int> GetUserId(string username)
+        {
+            var users = _employeeContext.Users.AsEnumerable();
+
+            try
+            {
+                var findUser = users
+                            .Select(user => user)
+                            .Where(user => user.Username == username);
+
+                var user = findUser.FirstOrDefault();
+
+                if (user != null)
+                {
+                    return Task.FromResult(user.Id);
+                }
+                else
+                {
+                    //wrong password
+                    return Task.FromException<int>(new InvalidOperationException($"No such username found"));
+                }
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public Task<Boolean> VerifyPassword(int id, string password)
         {
             var users = _employeeContext.Users.AsEnumerable();
