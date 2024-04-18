@@ -38,8 +38,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/my-profile" element={<Profile />} />
-                        <Route path="/forgot-password" element={<ForgotPassword />} />
-                        <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/change-password" element={<ChangePassword />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>

@@ -12,7 +12,9 @@ export function Catalog() {
 
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="text-2xl">Certifications</h1>
+      <h1 className="text-center text-4xl font-bold my-4">
+        Certification Catalog
+      </h1>
       {certificates && <DataTable columns={columns} data={certificates} />}
     </div>
   );
