@@ -3,9 +3,7 @@ import { DashboardCertificate } from "@/lib/types";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/components/dashboard-table/columns";
 import { Employee } from "@/lib/types";
-import { getExpiryDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
 import * as XLSX from "xlsx";
 import {
   DashboardYearSelect,
@@ -13,7 +11,7 @@ import {
 } from "@/components/dashboard-table/filter";
 
 export function Dashboard() {
-  const [data, setData] = useState<DashboardCertificate[]>();
+  const [data, setData] = useState<Employee[]>();
   const [filteredData, setFilteredData] = useState<DashboardCertificate[]>();
   const [adoption, setAdoption] = useState<number>();
   const [year, setYear] = useState<string>();
@@ -23,12 +21,27 @@ export function Dashboard() {
   }, []);
 
   useEffect(() => {
+    if (data) {
+      const filteredData = filterByYear(data, new Date().getFullYear().toString());
+      setFilteredData(filteredData);
+    }
+  }, [data]);
+
+  useEffect(() => {
     if (data && year) {
       const filteredData = filterByYear(data, year);
-      console.log("Filtered Data", filteredData);
       setFilteredData(filteredData);
     }
   }, [year]);
+
+  useEffect(() => {
+    if (filteredData) {
+      const noCertificates = filteredData.filter((certificate) => certificate.certificateLevel === "No certificates").length;
+      const adoptionRate = (filteredData.length - noCertificates) / filteredData.length * 100;
+      const roundedAdoptionRate = parseFloat(adoptionRate.toFixed(2));
+      setAdoption(roundedAdoptionRate);
+    }
+  }, [filteredData]);
 
   return (
     <div className="flex flex-col gap-2 px-8">
@@ -43,81 +56,16 @@ export function Dashboard() {
           Export to Excel
         </Button>
       </div>
-      {data && <DataTable columns={columns} data={filteredData || data} />}
+      {data && <DataTable columns={columns} data={filteredData || []} />}
     </div>
   );
 
   async function populateData() {
     const response = await fetch("employee");
     const data: Employee[] = await response.json();
-
-    // Filter out employees without any achievements
-    const filteredData = data.filter(
-      (employee) => employee.achievements.length > 0,
-    );
-
-    console.log(filteredData);
-
-    // Calculate adoption rate by counting the number of employees with at least one *valid* certificate
-    const adoptionRate =
-      filteredData.filter((employee) =>
-        employee.achievements.some(
-          (achievement) =>
-            getExpiryDate(
-              achievement.certificate.level,
-              achievement.certifiedDate,
-              achievement.expiryDate,
-            )! < new Date(),
-        ),
-      ).length / data.length;
-
-    console.log("Adoption Rate", adoptionRate);
-    const roundedAdoptionRate = parseFloat(adoptionRate.toFixed(2));
-    console.log("Rounded Adoption Rate", roundedAdoptionRate);
-    setAdoption(roundedAdoptionRate);
-
-    // Flatten the data to have one record per certificate per employee
-    // Use one entry with no certificates for employees with no achievements
-    const flattenedData = data.flatMap((employee) => {
-      if (!employee.achievements.length) {
-        return [
-          {
-            employeeId: employee.id,
-            fullName: employee.fullName,
-            role: employee.role,
-            grade: employee.grade,
-            email: employee.email,
-            certificateName: "",
-            certificateLevel: "No certificates",
-            certifiedDate: "",
-            expiryDate: "",
-          },
-        ];
-      }
-      return employee.achievements.map((achievement) => {
-        // Calculate the expiry date based on the certificate level
-        const date = getExpiryDate(
-          achievement.certificate.level,
-          achievement.certifiedDate,
-          achievement.expiryDate,
-        );
-        const expiryDate = date ? format(date, "MM/dd/yyyy") : "N/A";
-        return {
-          employeeId: employee.id,
-          fullName: employee.fullName,
-          role: employee.role,
-          grade: employee.grade,
-          email: employee.email,
-          certificateName: achievement.certificateName,
-          certificateLevel: achievement.certificate.level,
-          certifiedDate: format(achievement.certifiedDate, "MM/dd/yyyy"),
-          expiryDate: expiryDate,
-        };
-      });
-    });
     // Fetch all certificates along with it
     // Fan out the data to have one record per certificate per employee
-    setData(flattenedData);
+    setData(data);
   }
 
   function exportToExcel() {
