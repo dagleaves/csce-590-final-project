@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
-    useContext, useEffect, useState, StyleSheet,
+    useContext, useEffect, useState
  } from "react";
 import { UserContext } from "@/components/layout";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"

@@ -43,8 +43,6 @@ export function Login() {
         alert("Invalid username or password");
       }
     });
-
-    //console.log(response.json());
   }
 
   async function cancelLogin() {
@@ -74,7 +72,7 @@ export function Login() {
               </Button>
               <Button variant="outline">Login</Button>
             </div>
-            <h4>Forgot Password?</h4>
+            <a href='/forgot-password'><h4>Forgot Password?</h4></a>
           </CardFooter>
         </form>
       </Card>
