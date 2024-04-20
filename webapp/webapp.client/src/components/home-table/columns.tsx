@@ -2,6 +2,55 @@ import { HomeCertificate } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { ModifyAchievement } from "@/components/achievements/update/dialog";
+import { Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+export function DeleteComponent({
+  id,
+  triggerRefresh,
+}: {
+  id: number;
+  triggerRefresh: () => void;
+}) {
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Trash2 className="flex cursor-pointer text-red-600 w-5 h-5" />
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Certificate</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete this certificate?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={async () => {
+              await fetch(`achievement/${id}`, {
+                method: "DELETE",
+              });
+              triggerRefresh();
+            }}
+          >
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
 
 export function getColumns(
   triggerRefresh: () => Promise<void>,
@@ -52,10 +101,12 @@ export function getColumns(
         const achievement = row.original;
 
         return (
-          <ModifyAchievement
-            achievement={achievement}
-            triggerRefresh={triggerRefresh}
-          />
+          <div className="flex w-full justify-center">
+            <ModifyAchievement
+              achievement={achievement}
+              triggerRefresh={triggerRefresh}
+            />
+          </div>
         );
       },
     },
@@ -66,17 +117,12 @@ export function getColumns(
         const achievement = row.original;
 
         return (
-          <Button
-            variant="outline"
-            onClick={async () => {
-              await fetch(`achievement/${achievement.id}`, {
-                method: "DELETE",
-              });
-              triggerRefresh();
-            }}
-          >
-            Delete
-          </Button>
+          <div className="flex w-full justify-center">
+            <DeleteComponent
+              id={achievement.id}
+              triggerRefresh={triggerRefresh}
+            />
+          </div>
         );
       },
     },

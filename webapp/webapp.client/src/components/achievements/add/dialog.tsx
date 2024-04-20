@@ -24,9 +24,7 @@ export function AddAchievement({
   return (
     <AlertDialog open={open}>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" onClick={toggleOpen}>
-          Add Achievement
-        </Button>
+        <Button onClick={toggleOpen}>Add Achievement</Button>
       </AlertDialogTrigger>
       <AlertDialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <AlertDialogHeader>

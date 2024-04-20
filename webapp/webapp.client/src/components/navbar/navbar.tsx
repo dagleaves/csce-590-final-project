@@ -28,7 +28,7 @@ export function NavBar() {
   }, [user]);
 
   return (
-    <div className="flex sticky top-0 z-50 h-[56px] w-full items-center justify-center bg-secondary py-2">
+    <div className="flex sticky top-0 z-50 h-[56px] w-full items-center justify-center py-2 border-b-2">
       <div className="flex w-full max-w-4xl">
         <div className="flex flex-row w-full items-center justify-between">
           <NavigationMenu>

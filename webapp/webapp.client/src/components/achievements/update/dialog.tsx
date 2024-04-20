@@ -7,7 +7,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { ModifyAchievementForm } from "./form";
-import { Button } from "@/components/ui/button";
+import { PenSquare } from "lucide-react";
 import { HomeCertificate } from "@/lib/types";
 
 export function ModifyAchievement({
@@ -20,7 +20,7 @@ export function ModifyAchievement({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">Modify</Button>
+        <PenSquare className="flex cursor-pointer w-5 h-5" />
       </AlertDialogTrigger>
       <AlertDialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <AlertDialogHeader>

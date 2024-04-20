@@ -92,7 +92,7 @@ export function ChangePassword() {
   }
 
   return (
-    <div className="flex w-full h-[65vh] justify-center items-end">
+    <div className="flex w-full h-[45vh] justify-center items-end">
       <Card>
         <form id="login_form" onSubmit={changePassword}>
           <CardHeader>
@@ -108,7 +108,14 @@ export function ChangePassword() {
           </CardContent>
           <CardFooter className="flex flex-col w-full gap-2">
             <div className="flex flex-row justify-between w-full">
-              <Button variant="outline">Change Password</Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(-1)}
+              >
+                Cancel
+              </Button>
+              <Button variant="default">Change Password</Button>
             </div>
           </CardFooter>
         </form>
