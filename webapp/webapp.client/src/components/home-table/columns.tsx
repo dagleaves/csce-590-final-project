@@ -19,13 +19,31 @@ export function getColumns(
       accessorKey: "certifiedDate",
       header: "Certified Date",
     },
-    {
-      accessorKey: "status",
-      header: "Status",
-    },
+
     {
       accessorKey: "expiryDate",
       header: "Expiry Date",
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const achievement = row.original;
+
+        if (!achievement.expiryDate) {
+          return null;
+        }
+
+        const expiryDate = new Date(achievement.expiryDate);
+        const currentDate = new Date();
+        const isExpired = expiryDate < currentDate;
+        const color = isExpired ? "text-red-500" : "text-green-500";
+        const className = `${color} rounded-full px-2 py-1`;
+
+        return (
+          <span className={className}>{isExpired ? "Expired" : "Valid"}</span>
+        );
+      },
     },
     {
       id: "modify",
