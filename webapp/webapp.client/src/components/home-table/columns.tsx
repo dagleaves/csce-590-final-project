@@ -1,6 +1,5 @@
 import { HomeCertificate } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import { ModifyAchievement } from "@/components/achievements/update/dialog";
 import { Trash2 } from "lucide-react";
 import {
