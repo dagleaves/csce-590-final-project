@@ -27,12 +27,14 @@ export function DashboardYearSelect({
   );
 
   return (
-    <Select onValueChange={(value) => setYear(value)}>
+    <Select
+      defaultValue={new Date().getFullYear().toString()}
+      onValueChange={(value) => setYear(value)}
+    >
       <SelectTrigger className="w-40">
         <SelectValue placeholder="Filter by year" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">All Years</SelectItem>
         {uniqueYears.map((year) => (
           <SelectItem key={year} value={year}>
             {year}
@@ -44,23 +46,17 @@ export function DashboardYearSelect({
 }
 
 export function filterByYear(data: Employee[], year: string) {
-  const filterYear =
-    year === "all" ? new Date().getFullYear().toString() : year;
-
   // Remove achievements not achieved in current year
   const filteredData = data.map((employee) => {
     const achievements = employee.achievements.filter(
       (achievement) =>
-        new Date(achievement.certifiedDate).getFullYear().toString() ===
-        filterYear,
+        new Date(achievement.certifiedDate).getFullYear().toString() === year,
     );
     return {
       ...employee,
       achievements: achievements,
     };
   });
-
-  console.log("filteredData", filteredData);
 
   // Flatten the data to have one record per certificate per employee
   // Use one entry with no certificates for employees with no achievements
