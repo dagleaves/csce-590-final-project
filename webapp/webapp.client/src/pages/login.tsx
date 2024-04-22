@@ -70,7 +70,7 @@ export function Login() {
               <Button type="button" variant="outline" onClick={cancelLogin}>
                 Cancel
               </Button>
-              <Button variant="outline">Login</Button>
+              <Button>Login</Button>
             </div>
             <a href="/forgot-password">
               <h4>Forgot Password?</h4>
