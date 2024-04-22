@@ -20,7 +20,7 @@ export function Home() {
   return (
     <div className="flex flex-col gap-4 mt-4">
       <h1 className="text-center text-4xl font-bold">
-        {name || "No user currently signed in"}
+        {name || "Please login to view your certificates."}
       </h1>
       {achievements && (
         <DataTable
